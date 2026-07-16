@@ -1,0 +1,3402 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git Fundamentals — Belajar Version Control dengan Cara Modern</title>
+    <meta
+      name="description"
+      content="Workshop Git Fundamentals untuk pemula: pelajari version control, branching, merge, hingga kolaborasi di GitHub lewat materi interaktif berbahasa Indonesia. Gratis, praktis, dan cocok untuk mahasiswa serta developer pemula."
+    />
+    <meta
+      name="keywords"
+      content="git, github, version control, workshop git, belajar git, git untuk pemula, git branching, git commands, tutorial git bahasa indonesia"
+    />
+    <meta name="author" content="Workshop Git Fundamentals" />
+    <link rel="canonical" href="https://example.github.io/git-fundamentals/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Git Fundamentals — Belajar Version Control dengan Cara Modern"
+    />
+    <meta
+      property="og:description"
+      content="Workshop interaktif untuk memahami Git dari nol: konsep dasar, alur kerja, branching, hingga praktik terbaik. Materi lengkap berbahasa Indonesia."
+    />
+    <meta
+      property="og:url"
+      content="https://example.github.io/git-fundamentals/"
+    />
+    <meta property="og:site_name" content="Git Fundamentals Workshop" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Git Fundamentals — Belajar Version Control dengan Cara Modern"
+    />
+    <meta
+      name="twitter:description"
+      content="Workshop interaktif untuk memahami Git dari nol: konsep dasar, alur kerja, branching, hingga praktik terbaik."
+    />
+
+    <!-- Favicon (inline SVG, commit-graph mark) -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230D1117'/%3E%3Ccircle cx='10' cy='8' r='3.4' fill='%2358A6FF'/%3E%3Ccircle cx='10' cy='24' r='3.4' fill='%23238636'/%3E%3Ccircle cx='22' cy='16' r='3.4' fill='%23238636'/%3E%3Cpath d='M10 11.4V20.6M10 14C10 16 12 16 14 16C18 16 18 16 22 16V12.6' stroke='%23F0F6FC' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+
+    <style>
+      /* ============================================================
+   0. DESIGN TOKENS
+   ============================================================ */
+      :root {
+        --bg: #0d1117;
+        --bg-soft: #0a0e14;
+        --surface: #161b22;
+        --surface-hover: #1c2330;
+        --surface-2: #1b222c;
+        --primary: #238636;
+        --primary-bright: #3fb950;
+        --secondary: #58a6ff;
+        --text: #f0f6fc;
+        --text-muted: #8b949e;
+        --text-faint: #6e7681;
+        --border: rgba(255, 255, 255, 0.08);
+        --border-strong: rgba(255, 255, 255, 0.16);
+        --danger: #f85149;
+        --warning: #d29922;
+
+        --font-sans:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter,
+          Helvetica, Arial, sans-serif;
+        --font-mono:
+          ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas,
+          "Liberation Mono", monospace;
+
+        --radius-sm: 8px;
+        --radius-md: 14px;
+        --radius-lg: 22px;
+        --radius-pill: 999px;
+
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+        --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+        --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.45);
+
+        --ease: cubic-bezier(0.16, 0.84, 0.44, 1);
+        --container: 1180px;
+      }
+
+      /* ============================================================
+   1. RESET
+   ============================================================ */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font-sans);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+      img,
+      svg {
+        display: block;
+        max-width: 100%;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      ul,
+      ol {
+        list-style: none;
+      }
+      button {
+        font: inherit;
+        color: inherit;
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+      input,
+      textarea {
+        font: inherit;
+      }
+      h1,
+      h2,
+      h3,
+      h4 {
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+        font-weight: 700;
+      }
+      :focus-visible {
+        outline: 2px solid var(--secondary);
+        outline-offset: 3px;
+        border-radius: 4px;
+      }
+
+      .container {
+        max-width: var(--container);
+        margin-inline: auto;
+        padding-inline: 24px;
+      }
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+
+      .skip-link {
+        position: absolute;
+        top: -100px;
+        left: 16px;
+        z-index: 1000;
+        background: var(--secondary);
+        color: #04121f;
+        padding: 10px 18px;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        transition: top 0.2s var(--ease);
+      }
+      .skip-link:focus {
+        top: 16px;
+      }
+
+      /* ============================================================
+   2. TOP PROGRESS BAR + SCROLL INDICATOR
+   ============================================================ */
+      .progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        width: 0%;
+        z-index: 1001;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        transition: width 0.1s linear;
+      }
+
+      /* ============================================================
+   3. NAVIGATION
+   ============================================================ */
+      .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 900;
+        backdrop-filter: blur(14px) saturate(140%);
+        -webkit-backdrop-filter: blur(14px) saturate(140%);
+        background: rgba(13, 17, 23, 0.72);
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-block: 14px;
+      }
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+        font-size: 1.05rem;
+        letter-spacing: -0.01em;
+      }
+      .nav-brand .mark {
+        width: 30px;
+        height: 30px;
+        flex-shrink: 0;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .nav-links a {
+        position: relative;
+        padding: 8px 14px;
+        border-radius: var(--radius-pill);
+        font-size: 0.92rem;
+        color: var(--text-muted);
+        transition:
+          color 0.2s var(--ease),
+          background 0.2s var(--ease);
+      }
+      .nav-links a:hover {
+        color: var(--text);
+        background: var(--surface-hover);
+      }
+      .nav-links a.active {
+        color: var(--text);
+      }
+      .nav-links a.active::after {
+        content: "";
+        position: absolute;
+        left: 14px;
+        right: 14px;
+        bottom: 2px;
+        height: 2px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        border-radius: 2px;
+      }
+      .nav-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 18px;
+        border-radius: var(--radius-pill);
+        background: var(--primary);
+        color: #fff;
+        font-weight: 600;
+        font-size: 0.9rem;
+        box-shadow: 0 0 0 0 rgba(35, 134, 54, 0.5);
+        transition:
+          transform 0.2s var(--ease),
+          box-shadow 0.2s var(--ease);
+      }
+      .nav-cta:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 20px rgba(35, 134, 54, 0.35);
+      }
+      .nav-toggle {
+        display: none;
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-sm);
+      }
+      .nav-toggle span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background: var(--text);
+        margin: 5px auto;
+        border-radius: 2px;
+        transition:
+          transform 0.25s var(--ease),
+          opacity 0.25s var(--ease);
+      }
+      .nav-toggle.is-open span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+      }
+      .nav-toggle.is-open span:nth-child(2) {
+        opacity: 0;
+      }
+      .nav-toggle.is-open span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+      }
+
+      @media (max-width: 880px) {
+        .nav-links {
+          position: fixed;
+          inset: 64px 0 0 0;
+          flex-direction: column;
+          align-items: stretch;
+          gap: 2px;
+          background: var(--bg-soft);
+          padding: 16px;
+          border-top: 1px solid var(--border);
+          transform: translateY(-12px);
+          opacity: 0;
+          visibility: hidden;
+          pointer-events: none;
+          transition:
+            opacity 0.25s var(--ease),
+            transform 0.25s var(--ease),
+            visibility 0.25s;
+          overflow-y: auto;
+        }
+        .nav-links.is-open {
+          transform: translateY(0);
+          opacity: 1;
+          visibility: visible;
+          pointer-events: auto;
+        }
+        .nav-links a {
+          padding: 14px 16px;
+          font-size: 1rem;
+        }
+        .nav-cta {
+          display: none;
+        }
+        .nav-toggle {
+          display: block;
+        }
+      }
+
+      /* ============================================================
+   4. COMPONENTS — Button
+   ============================================================ */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 13px 26px;
+        border-radius: var(--radius-pill);
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition:
+          transform 0.2s var(--ease),
+          box-shadow 0.2s var(--ease),
+          background 0.2s var(--ease),
+          border-color 0.2s var(--ease);
+        position: relative;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      .btn--primary {
+        background: linear-gradient(
+          135deg,
+          var(--primary-bright),
+          var(--primary)
+        );
+        color: #fff;
+        box-shadow: var(--shadow-sm);
+      }
+      .btn--primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px rgba(35, 134, 54, 0.4);
+      }
+      .btn--secondary {
+        background: var(--surface);
+        border: 1px solid var(--border-strong);
+        color: var(--text);
+      }
+      .btn--secondary:hover {
+        background: var(--surface-hover);
+        border-color: var(--secondary);
+      }
+      .btn--ghost {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+      }
+      .btn--ghost:hover {
+        color: var(--text);
+        border-color: var(--border-strong);
+      }
+      .btn--sm {
+        padding: 8px 16px;
+        font-size: 0.82rem;
+      }
+      .btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: none !important;
+      }
+
+      /* ripple */
+      .btn .ripple {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.35);
+        transform: scale(0);
+        animation: ripple 0.6s var(--ease);
+        pointer-events: none;
+      }
+      @keyframes ripple {
+        to {
+          transform: scale(3);
+          opacity: 0;
+        }
+      }
+
+      /* ============================================================
+   5. COMPONENTS — Section header / eyebrow / badge
+   ============================================================ */
+      .section {
+        padding-block: 112px;
+        position: relative;
+      }
+      .section--tight {
+        padding-block: 88px;
+      }
+      .section-header {
+        max-width: 680px;
+        margin-bottom: 56px;
+      }
+      .section-header--center {
+        margin-inline: auto;
+        text-align: center;
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        letter-spacing: 0.06em;
+        color: var(--secondary);
+        text-transform: uppercase;
+        margin-bottom: 14px;
+      }
+      .eyebrow::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--secondary);
+        box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.18);
+      }
+      .section-title {
+        font-size: clamp(1.7rem, 3.2vw, 2.5rem);
+        margin-bottom: 14px;
+      }
+      .section-desc {
+        color: var(--text-muted);
+        font-size: 1.05rem;
+        max-width: 60ch;
+      }
+      .section-header--center .section-desc {
+        margin-inline: auto;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 12px;
+        border-radius: var(--radius-pill);
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        border: 1px solid var(--border-strong);
+        color: var(--text-muted);
+        background: var(--surface);
+      }
+      .badge--primary {
+        color: var(--primary-bright);
+        border-color: rgba(63, 185, 80, 0.3);
+        background: rgba(63, 185, 80, 0.08);
+      }
+      .badge--secondary {
+        color: var(--secondary);
+        border-color: rgba(88, 166, 255, 0.3);
+        background: rgba(88, 166, 255, 0.08);
+      }
+      .badge--danger {
+        color: var(--danger);
+        border-color: rgba(248, 81, 73, 0.3);
+        background: rgba(248, 81, 73, 0.08);
+      }
+
+      /* ============================================================
+   6. COMPONENTS — Card
+   ============================================================ */
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 28px;
+        transition:
+          transform 0.3s var(--ease),
+          border-color 0.3s var(--ease),
+          box-shadow 0.3s var(--ease),
+          background 0.3s var(--ease);
+      }
+      .card:hover {
+        transform: translateY(-4px);
+        border-color: var(--border-strong);
+        box-shadow: var(--shadow-md);
+        background: var(--surface-2);
+      }
+      .card__icon {
+        width: 46px;
+        height: 46px;
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(88, 166, 255, 0.1);
+        color: var(--secondary);
+        margin-bottom: 18px;
+      }
+      .card__icon svg {
+        width: 22px;
+        height: 22px;
+      }
+      .card h3 {
+        font-size: 1.08rem;
+        margin-bottom: 8px;
+      }
+      .card p {
+        color: var(--text-muted);
+        font-size: 0.92rem;
+      }
+
+      .grid {
+        display: grid;
+        gap: 22px;
+      }
+      .grid--3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .grid--4 {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      @media (max-width: 960px) {
+        .grid--3,
+        .grid--4 {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 620px) {
+        .grid--3,
+        .grid--4 {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ============================================================
+   7. COMPONENTS — Code block / command card
+   ============================================================ */
+      .code-block {
+        background: #0a0e14;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        overflow: hidden;
+      }
+      .code-block__head {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--border);
+      }
+      .code-block__dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+      }
+      .code-block__body {
+        padding: 14px 16px;
+        overflow-x: auto;
+        color: #c9d1d9;
+        white-space: pre;
+      }
+      .code-block__body .tok-cmd {
+        color: var(--secondary);
+      }
+      .code-block__body .tok-cmt {
+        color: var(--text-faint);
+      }
+      .code-block__body .tok-str {
+        color: var(--primary-bright);
+      }
+
+      .command-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 22px;
+        transition:
+          border-color 0.25s var(--ease),
+          transform 0.25s var(--ease);
+      }
+      .command-card:hover {
+        border-color: var(--secondary);
+        transform: translateY(-3px);
+      }
+      .command-card__cmd {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--primary-bright);
+        margin-bottom: 10px;
+        display: block;
+      }
+      .command-card__desc {
+        color: var(--text-muted);
+        font-size: 0.88rem;
+        margin-bottom: 14px;
+      }
+      .command-card__example {
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        background: var(--bg-soft);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 10px 12px;
+        color: #c9d1d9;
+        overflow-x: auto;
+      }
+
+      /* ============================================================
+   8. COMPONENTS — Timeline
+   ============================================================ */
+      .timeline {
+        position: relative;
+        padding-left: 36px;
+      }
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 9px;
+        top: 6px;
+        bottom: 6px;
+        width: 2px;
+        background: linear-gradient(var(--primary), var(--secondary));
+        border-radius: 2px;
+      }
+      .timeline-item {
+        position: relative;
+        padding-bottom: 36px;
+      }
+      .timeline-item:last-child {
+        padding-bottom: 0;
+      }
+      .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: -36px;
+        top: 4px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: var(--bg);
+        border: 2px solid var(--secondary);
+      }
+      .timeline-item h4 {
+        font-size: 1.02rem;
+        margin-bottom: 6px;
+      }
+      .timeline-item p {
+        color: var(--text-muted);
+        font-size: 0.92rem;
+      }
+      .timeline-item time {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        color: var(--secondary);
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      /* ============================================================
+   9. COMPONENTS — Table
+   ============================================================ */
+      .table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 640px;
+      }
+      thead th {
+        text-align: left;
+        padding: 16px 20px;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--text-muted);
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+      }
+      tbody td {
+        padding: 16px 20px;
+        font-size: 0.92rem;
+        border-bottom: 1px solid var(--border);
+        color: var(--text);
+      }
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+      tbody tr:hover {
+        background: var(--surface-hover);
+      }
+      tbody td:first-child {
+        font-weight: 600;
+        color: var(--secondary);
+      }
+
+      /* ============================================================
+   10. COMPONENTS — Accordion (FAQ)
+   ============================================================ */
+      .accordion-item {
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        margin-bottom: 12px;
+        overflow: hidden;
+        background: var(--surface);
+      }
+      .accordion-trigger {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 20px 22px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.98rem;
+      }
+      .accordion-trigger:hover {
+        background: var(--surface-hover);
+      }
+      .accordion-trigger .icon {
+        flex-shrink: 0;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 1px solid var(--border-strong);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          transform 0.3s var(--ease),
+          background 0.3s var(--ease);
+      }
+      .accordion-trigger[aria-expanded="true"] .icon {
+        transform: rotate(45deg);
+        background: var(--secondary);
+        border-color: var(--secondary);
+      }
+      .accordion-panel {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.35s var(--ease);
+      }
+      .accordion-panel__inner {
+        padding: 0 22px 20px;
+        color: var(--text-muted);
+        font-size: 0.92rem;
+        max-width: 65ch;
+      }
+
+      /* ============================================================
+   11. COMPONENTS — Tooltip
+   ============================================================ */
+      .tooltip {
+        position: relative;
+      }
+      .tooltip::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: calc(100% + 8px);
+        left: 50%;
+        transform: translateX(-50%) translateY(4px);
+        background: #010409;
+        color: var(--text);
+        font-size: 0.72rem;
+        padding: 6px 10px;
+        border-radius: 6px;
+        white-space: nowrap;
+        border: 1px solid var(--border-strong);
+        opacity: 0;
+        pointer-events: none;
+        transition:
+          opacity 0.2s var(--ease),
+          transform 0.2s var(--ease);
+        z-index: 20;
+      }
+      .tooltip:hover::after,
+      .tooltip:focus-visible::after {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      /* ============================================================
+   12. COMPONENTS — Toast
+   ============================================================ */
+      .toast-region {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 1002;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 320px;
+      }
+      .toast {
+        background: var(--surface-2);
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius-md);
+        padding: 14px 16px;
+        font-size: 0.85rem;
+        box-shadow: var(--shadow-lg);
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        animation: toast-in 0.3s var(--ease);
+      }
+      .toast__dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--primary-bright);
+        margin-top: 5px;
+        flex-shrink: 0;
+      }
+      .toast.leaving {
+        animation: toast-out 0.25s var(--ease) forwards;
+      }
+      @keyframes toast-in {
+        from {
+          opacity: 0;
+          transform: translateY(10px) scale(0.96);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      @keyframes toast-out {
+        to {
+          opacity: 0;
+          transform: translateX(20px) scale(0.96);
+        }
+      }
+
+      /* ============================================================
+   13. COMPONENTS — Progress / count
+   ============================================================ */
+      .progress-track {
+        width: 100%;
+        height: 6px;
+        border-radius: var(--radius-pill);
+        background: var(--surface-2);
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        border-radius: var(--radius-pill);
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        width: 0%;
+        transition: width 0.6s var(--ease);
+      }
+
+      /* ============================================================
+   14. COMPONENTS — Back to top
+   ============================================================ */
+      .back-to-top {
+        position: fixed;
+        bottom: 24px;
+        left: 24px;
+        z-index: 900;
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: var(--surface-2);
+        border: 1px solid var(--border-strong);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition:
+          opacity 0.3s var(--ease),
+          transform 0.3s var(--ease),
+          visibility 0.3s;
+        box-shadow: var(--shadow-md);
+      }
+      .back-to-top.is-visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+      .back-to-top:hover {
+        border-color: var(--secondary);
+      }
+
+      /* ============================================================
+   15. HERO
+   ============================================================ */
+      .hero {
+        position: relative;
+        padding-block: 150px 120px;
+        overflow: hidden;
+        background:
+          radial-gradient(
+            ellipse 900px 500px at 15% -10%,
+            rgba(35, 134, 54, 0.28),
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse 800px 500px at 85% 10%,
+            rgba(88, 166, 255, 0.22),
+            transparent 60%
+          ),
+          var(--bg);
+      }
+      .hero-graph {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        opacity: 0.5;
+        pointer-events: none;
+      }
+      .hero-inner {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 56px;
+        align-items: center;
+      }
+      @media (max-width: 940px) {
+        .hero-inner {
+          grid-template-columns: 1fr;
+        }
+      }
+      .hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        color: var(--primary-bright);
+        background: rgba(63, 185, 80, 0.08);
+        border: 1px solid rgba(63, 185, 80, 0.25);
+        padding: 6px 14px;
+        border-radius: var(--radius-pill);
+        margin-bottom: 22px;
+      }
+      .hero h1 {
+        font-size: clamp(2.2rem, 5vw, 3.6rem);
+        margin-bottom: 18px;
+      }
+      .hero h1 .accent {
+        background: linear-gradient(
+          120deg,
+          var(--primary-bright),
+          var(--secondary)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .hero .subtitle {
+        font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+        color: var(--secondary);
+        font-weight: 600;
+        margin-bottom: 18px;
+      }
+      .hero p.lead {
+        color: var(--text-muted);
+        font-size: 1.05rem;
+        max-width: 52ch;
+        margin-bottom: 34px;
+      }
+      .hero-actions {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-bottom: 44px;
+      }
+      .hero-stats {
+        display: flex;
+        gap: 36px;
+        flex-wrap: wrap;
+      }
+      .hero-stat strong {
+        display: block;
+        font-size: 1.7rem;
+        font-family: var(--font-mono);
+        color: var(--text);
+      }
+      .hero-stat span {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+      }
+
+      .hero-visual {
+        background: var(--surface);
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+      }
+      .hero-visual__head {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border);
+        background: var(--surface-2);
+      }
+      .hero-visual__head span:last-child {
+        margin-left: 8px;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        color: var(--text-muted);
+      }
+      .hero-visual__body {
+        padding: 22px;
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        min-height: 220px;
+      }
+      .hero-visual__line {
+        color: var(--text-muted);
+        margin-bottom: 8px;
+      }
+      .hero-visual__line .p {
+        color: var(--primary-bright);
+      }
+      .hero-visual__line .out {
+        color: #c9d1d9;
+      }
+      #typing-line::after {
+        content: "";
+        display: inline-block;
+        width: 7px;
+        height: 1em;
+        background: var(--secondary);
+        vertical-align: -2px;
+        margin-left: 2px;
+        animation: blink 1s steps(1) infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+
+      /* ============================================================
+   16. SCROLL REVEAL
+   ============================================================ */
+      .reveal {
+        opacity: 0;
+        transform: translateY(28px);
+        transition:
+          opacity 0.7s var(--ease),
+          transform 0.7s var(--ease);
+      }
+      .reveal.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .reveal-stagger.is-visible > * {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .reveal-stagger > * {
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+          opacity 0.6s var(--ease),
+          transform 0.6s var(--ease);
+      }
+      .reveal-stagger.is-visible > *:nth-child(1) {
+        transition-delay: 0.04s;
+      }
+      .reveal-stagger.is-visible > *:nth-child(2) {
+        transition-delay: 0.1s;
+      }
+      .reveal-stagger.is-visible > *:nth-child(3) {
+        transition-delay: 0.16s;
+      }
+      .reveal-stagger.is-visible > *:nth-child(4) {
+        transition-delay: 0.22s;
+      }
+      .reveal-stagger.is-visible > *:nth-child(5) {
+        transition-delay: 0.28s;
+      }
+      .reveal-stagger.is-visible > *:nth-child(6) {
+        transition-delay: 0.34s;
+      }
+      .reveal-stagger.is-visible > *:nth-child(7) {
+        transition-delay: 0.4s;
+      }
+      .reveal-stagger.is-visible > *:nth-child(8) {
+        transition-delay: 0.46s;
+      }
+
+      /* ============================================================
+   17. SECTION-SPECIFIC — Workflow
+   ============================================================ */
+      .workflow {
+        display: flex;
+        align-items: stretch;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .workflow-step {
+        flex: 1 1 200px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 26px 22px;
+        text-align: center;
+        position: relative;
+      }
+      .workflow-step .num {
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        color: var(--secondary);
+        letter-spacing: 0.08em;
+      }
+      .workflow-step h4 {
+        margin: 10px 0 8px;
+        font-size: 1.02rem;
+      }
+      .workflow-step p {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+      }
+      .workflow-arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        color: var(--text-faint);
+      }
+      @media (max-width: 860px) {
+        .workflow {
+          flex-direction: column;
+        }
+        .workflow-arrow {
+          transform: rotate(90deg);
+          padding: 2px 0;
+        }
+      }
+
+      /* ============================================================
+   18. SECTION-SPECIFIC — Lifecycle
+   ============================================================ */
+      .lifecycle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .lifecycle-node {
+        flex: 1 1 140px;
+        text-align: center;
+        padding: 20px 12px;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+      .lifecycle-node .dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        margin: 0 auto 12px;
+      }
+      .lifecycle-node h4 {
+        font-size: 0.9rem;
+        margin-bottom: 4px;
+      }
+      .lifecycle-node p {
+        font-size: 0.76rem;
+        color: var(--text-muted);
+      }
+      .lifecycle-arrow {
+        color: var(--text-faint);
+        flex: 0 0 auto;
+      }
+      @media (max-width: 820px) {
+        .lifecycle {
+          flex-direction: column;
+        }
+        .lifecycle-arrow {
+          transform: rotate(90deg);
+        }
+      }
+
+      /* ============================================================
+   19. SECTION-SPECIFIC — Branching diagram
+   ============================================================ */
+      .branch-diagram {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 32px;
+        overflow-x: auto;
+      }
+      .branch-legend {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+        font-size: 0.82rem;
+        color: var(--text-muted);
+      }
+      .branch-legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .branch-legend i {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+
+      /* ============================================================
+   20. SECTION-SPECIFIC — Playground
+   ============================================================ */
+      .playground {
+        background: var(--surface);
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius-lg);
+        padding: 32px;
+        display: grid;
+        grid-template-columns: 1fr 1.3fr;
+        gap: 32px;
+      }
+      @media (max-width: 900px) {
+        .playground {
+          grid-template-columns: 1fr;
+        }
+      }
+      .playground-controls h3 {
+        font-size: 1rem;
+        margin-bottom: 6px;
+      }
+      .playground-controls p {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        margin-bottom: 18px;
+      }
+      .playground-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 22px;
+      }
+      .playground-status {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .status-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85rem;
+        padding: 10px 14px;
+        background: var(--bg-soft);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+      }
+      .status-row strong {
+        color: var(--text);
+      }
+
+      .repo-zones {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+      @media (max-width: 600px) {
+        .repo-zones {
+          grid-template-columns: 1fr;
+        }
+      }
+      .repo-zone {
+        background: var(--bg-soft);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 16px;
+        min-height: 150px;
+      }
+      .repo-zone h5 {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--text-muted);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .repo-zone h5 i {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+      }
+      .repo-file {
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        padding: 7px 10px;
+        border-radius: 6px;
+        margin-bottom: 6px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        animation: file-in 0.3s var(--ease);
+      }
+      @keyframes file-in {
+        from {
+          opacity: 0;
+          transform: translateX(-6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      .repo-file .tag {
+        font-size: 0.65rem;
+        color: var(--text-faint);
+      }
+      .repo-empty {
+        color: var(--text-faint);
+        font-size: 0.78rem;
+        font-style: italic;
+      }
+      .playground-console {
+        grid-column: 1 / -1;
+        background: #010409;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        padding: 16px;
+        height: 150px;
+        overflow-y: auto;
+        color: #c9d1d9;
+      }
+      .playground-console .line {
+        margin-bottom: 6px;
+      }
+      .playground-console .line .p {
+        color: var(--primary-bright);
+      }
+
+      /* ============================================================
+   21. SECTION-SPECIFIC — Cheat sheet
+   ============================================================ */
+      .cheat-group h4 {
+        font-size: 0.95rem;
+        color: var(--secondary);
+        margin-bottom: 14px;
+        font-family: var(--font-mono);
+      }
+      .cheat-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 10px 0;
+        border-bottom: 1px dashed var(--border);
+        font-size: 0.85rem;
+      }
+      .cheat-row:last-child {
+        border-bottom: none;
+      }
+      .cheat-row code {
+        font-family: var(--font-mono);
+        color: var(--primary-bright);
+      }
+      .cheat-row span {
+        color: var(--text-muted);
+        text-align: right;
+      }
+
+      /* ============================================================
+   22. FOOTER
+   ============================================================ */
+      /* ── Pemateri ── */
+      .speaker-card {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        max-width: 600px;
+        margin-inline: auto;
+        background: var(--bg-soft);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 2rem;
+      }
+      .speaker-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--accent);
+        flex-shrink: 0;
+      }
+      .speaker-info h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+      }
+      .speaker-role {
+        font-size: 0.85rem;
+        color: var(--accent);
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+      }
+      .speaker-bio {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+      }
+      @media (max-width: 540px) {
+        .speaker-card {
+          flex-direction: column;
+          text-align: center;
+        }
+      }
+
+      .footer {
+        border-top: 1px solid var(--border);
+        padding-block: 56px 32px;
+        background: var(--bg-soft);
+      }
+      .footer-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+      .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+      }
+      .footer-brand svg {
+        width: 26px;
+        height: 26px;
+      }
+      .footer-meta {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+      }
+      .footer-meta span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .footer-bottom {
+        margin-top: 28px;
+        padding-top: 24px;
+        border-top: 1px solid var(--border);
+        text-align: center;
+        color: var(--text-faint);
+        font-size: 0.8rem;
+      }
+
+      /* ============================================================
+   23. DIVIDER (signature commit-graph rule)
+   ============================================================ */
+      .commit-divider {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text-faint);
+        margin-block: 8px 0;
+        opacity: 0.7;
+      }
+      .commit-divider svg {
+        flex-shrink: 0;
+      }
+      .commit-divider .rule {
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+
+      @media (max-width: 600px) {
+        .section {
+          padding-block: 72px;
+        }
+        .hero {
+          padding-block: 120px 80px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Lewati ke konten utama</a>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- ============================================================
+     NAVIGATION
+     ============================================================ -->
+    <header class="navbar">
+      <div class="container nav-inner">
+        <a href="#top" class="nav-brand">
+          <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
+            <rect
+              width="32"
+              height="32"
+              rx="8"
+              fill="#161B22"
+              stroke="rgba(255,255,255,.1)"
+            />
+            <circle cx="10" cy="9" r="3" fill="#58A6FF" />
+            <circle cx="10" cy="23" r="3" fill="#238636" />
+            <circle cx="22" cy="16" r="3" fill="#238636" />
+            <path
+              d="M10 12v8M10 14.5c0 1.5 1.7 1.5 3.5 1.5 4 0 5 0 8.5 0v-3"
+              stroke="#F0F6FC"
+              stroke-width="1.4"
+              fill="none"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span>Git Fundamentals</span>
+        </a>
+        <button
+          class="nav-toggle"
+          id="navToggle"
+          aria-expanded="false"
+          aria-controls="navLinks"
+          aria-label="Buka menu navigasi"
+        >
+          <span></span><span></span><span></span>
+        </button>
+        <nav id="navLinks" class="nav-links" aria-label="Navigasi utama">
+          <a href="#apa-itu-git">Konsep</a>
+          <a href="#alur-kerja">Alur Kerja</a>
+          <a href="#perintah">Perintah</a>
+          <a href="#branching">Branching</a>
+          <a href="#playground">Playground</a>
+          <a href="#cheat-sheet">Cheat Sheet</a>
+          <a href="#pemateri">Pemateri</a>
+          <a href="#faq">FAQ</a>
+          <a href="#playground" class="nav-cta">Coba Sekarang</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- ============================================================
+     1. HERO
+     ============================================================ -->
+      <section class="hero" id="top">
+        <svg
+          class="hero-graph"
+          viewBox="0 0 1200 500"
+          preserveAspectRatio="xMidYMid slice"
+          aria-hidden="true"
+        >
+          <g stroke="rgba(255,255,255,.08)" stroke-width="2" fill="none">
+            <path d="M100 60 V440" />
+            <path d="M300 160 V440" />
+            <path d="M300 160 C300 110, 100 130, 100 60" />
+            <path d="M500 260 V440" />
+            <path d="M500 260 C500 210, 300 230, 300 160" />
+          </g>
+          <g fill="#58A6FF" opacity=".6">
+            <circle cx="100" cy="60" r="6" />
+            <circle cx="100" cy="200" r="6" />
+            <circle cx="100" cy="340" r="6" />
+          </g>
+          <g fill="#238636" opacity=".6">
+            <circle cx="300" cy="160" r="6" />
+            <circle cx="300" cy="300" r="6" />
+          </g>
+          <g fill="#238636" opacity=".6">
+            <circle cx="500" cy="260" r="6" />
+            <circle cx="500" cy="400" r="6" />
+          </g>
+        </svg>
+
+        <div class="container hero-inner">
+          <div>
+            <span class="hero-eyebrow"
+              >🎓 Workshop Gratis &middot; Untuk Pemula</span
+            >
+            <h1>Git <span class="accent">Fundamentals</span></h1>
+            <p class="subtitle">Learn Version Control the Modern Way</p>
+            <p class="lead">
+              Workshop interaktif untuk mahasiswa, siswa SMK, dan developer
+              pemula yang ingin memahami Git dari konsep dasar hingga kolaborasi
+              tim di GitHub — lengkap dengan simulasi langsung di browser, tanpa
+              perlu instalasi apa pun.
+            </p>
+            <div class="hero-actions">
+              <a href="#playground" class="btn btn--primary"
+                >Mulai Simulasi Git</a
+              >
+              <a href="#perintah" class="btn btn--secondary"
+                >Lihat Daftar Perintah</a
+              >
+            </div>
+            <div class="hero-stats">
+              <div class="hero-stat">
+                <strong data-count="16">0</strong><span>Perintah Git</span>
+              </div>
+              <div class="hero-stat">
+                <strong data-count="14">0</strong><span>Materi Belajar</span>
+              </div>
+              <div class="hero-stat">
+                <strong data-count="100">0</strong><span>% Gratis</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-visual" aria-hidden="true">
+            <div class="hero-visual__head">
+              <span
+                class="code-block__dot"
+                style="
+                  width: 11px;
+                  height: 11px;
+                  border-radius: 50%;
+                  background: #f85149;
+                  display: inline-block;
+                "
+              ></span>
+              <span
+                class="code-block__dot"
+                style="
+                  width: 11px;
+                  height: 11px;
+                  border-radius: 50%;
+                  background: #d29922;
+                  display: inline-block;
+                "
+              ></span>
+              <span
+                class="code-block__dot"
+                style="
+                  width: 11px;
+                  height: 11px;
+                  border-radius: 50%;
+                  background: #3fb950;
+                  display: inline-block;
+                "
+              ></span>
+              <span>terminal — workshop-git</span>
+            </div>
+            <div class="hero-visual__body">
+              <div class="hero-visual__line">
+                <span class="p">$</span> <span id="typing-line"></span>
+              </div>
+              <div class="hero-visual__line out">
+                Initialized empty Git repository in ~/workshop-git/.git/
+              </div>
+              <div class="hero-visual__line">
+                <span class="p">$</span> git status
+              </div>
+              <div class="hero-visual__line out">On branch main</div>
+              <div class="hero-visual__line out">
+                nothing to commit, working tree clean
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+     2. APA ITU GIT
+     ============================================================ -->
+      <section class="section" id="apa-itu-git">
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="eyebrow">Konsep Dasar</span>
+            <h2 class="section-title">Apa Itu Git?</h2>
+            <p class="section-desc">
+              Git adalah sistem kontrol versi (version control system)
+              terdistribusi yang mencatat setiap perubahan pada kode secara
+              lokal, sehingga tim dapat berkolaborasi tanpa saling menimpa
+              pekerjaan.
+            </p>
+          </div>
+
+          <div
+            style="display: grid; grid-template-columns: 1fr 1fr; gap: 56px"
+            class="reveal"
+          >
+            <div class="timeline">
+              <div class="timeline-item">
+                <time>Sebelum Git</time>
+                <h4>Berbagi kode lewat email &amp; folder "final_v2"</h4>
+                <p>
+                  Developer saling mengirim file zip, menamai file dengan
+                  "final", "final_fix", "final_beneran" — riwayat perubahan
+                  hilang dan konflik sulit dilacak.
+                </p>
+              </div>
+              <div class="timeline-item">
+                <time>2005</time>
+                <h4>Linus Torvalds menciptakan Git</h4>
+                <p>
+                  Dibuat untuk mengelola pengembangan kernel Linux yang
+                  melibatkan ribuan kontributor, butuh sistem cepat,
+                  terdistribusi, dan tahan konflik.
+                </p>
+              </div>
+              <div class="timeline-item">
+                <time>Sekarang</time>
+                <h4>Standar industri version control</h4>
+                <p>
+                  Hampir semua perusahaan teknologi menggunakan Git — dari
+                  startup kecil hingga perusahaan raksasa — sebagai fondasi
+                  kolaborasi kode.
+                </p>
+              </div>
+            </div>
+
+            <div class="grid" style="grid-template-columns: 1fr; gap: 16px">
+              <div class="card">
+                <div class="card__icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="M12 20V10M12 10l-4 4M12 10l4 4" />
+                    <circle cx="12" cy="5" r="2.5" />
+                  </svg>
+                </div>
+                <h3>Masalah Sebelum Ada Git</h3>
+                <p>
+                  Tidak ada riwayat perubahan, sulit kembali ke versi
+                  sebelumnya, dan kerja tim rawan saling menimpa file satu sama
+                  lain.
+                </p>
+              </div>
+              <div class="card">
+                <div class="card__icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="M4 4v16h16" />
+                    <path d="M4 14l4-4 4 3 8-8" />
+                  </svg>
+                </div>
+                <h3>Mengapa Git Dibuat</h3>
+                <p>
+                  Untuk mencatat setiap perubahan secara otomatis, memungkinkan
+                  banyak orang bekerja paralel lewat branch, lalu menggabungkan
+                  hasilnya dengan aman.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+     3. WHY LEARN GIT
+     ============================================================ -->
+      <section
+        class="section section--tight"
+        id="mengapa-git"
+        style="background: var(--bg-soft)"
+      >
+        <div class="container">
+          <div class="section-header section-header--center reveal">
+            <span class="eyebrow">Manfaat</span>
+            <h2 class="section-title">Kenapa Perlu Belajar Git?</h2>
+            <p class="section-desc">
+              Enam alasan Git menjadi keahlian wajib bagi siapa pun yang menulis
+              kode.
+            </p>
+          </div>
+
+          <div class="grid grid--3 reveal-stagger">
+            <div class="card">
+              <div class="card__icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 7v5l3 3" />
+                </svg>
+              </div>
+              <h3>Version Control</h3>
+              <p>
+                Setiap perubahan tersimpan sebagai riwayat, sehingga kamu bisa
+                kembali ke versi sebelumnya kapan saja.
+              </p>
+            </div>
+            <div class="card">
+              <div class="card__icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="8" cy="8" r="3" />
+                  <circle cx="16" cy="16" r="3" />
+                  <path d="M10.5 9.5l3 3" />
+                </svg>
+              </div>
+              <h3>Kolaborasi</h3>
+              <p>
+                Banyak orang bisa mengerjakan proyek yang sama secara bersamaan
+                tanpa saling menimpa pekerjaan.
+              </p>
+            </div>
+            <div class="card">
+              <div class="card__icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M4 6h16M4 12h10M4 18h14" />
+                </svg>
+              </div>
+              <h3>Riwayat Lengkap</h3>
+              <p>
+                Setiap commit menyimpan pesan, waktu, dan siapa penulisnya —
+                jejak audit yang sangat berguna.
+              </p>
+            </div>
+            <div class="card">
+              <div class="card__icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="4" y="8" width="16" height="12" rx="2" />
+                  <path d="M8 8V6a4 4 0 018 0v2" />
+                </svg>
+              </div>
+              <h3>Backup Aman</h3>
+              <p>
+                Kode tersimpan di repository lokal maupun remote seperti GitHub,
+                sehingga risiko kehilangan data jauh berkurang.
+              </p>
+            </div>
+            <div class="card">
+              <div class="card__icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="6" cy="6" r="2.5" />
+                  <circle cx="6" cy="18" r="2.5" />
+                  <circle cx="18" cy="12" r="2.5" />
+                  <path d="M6 8.5V15.5M8.2 7l7.6 3.8M8.2 17l7.6-3.8" />
+                </svg>
+              </div>
+              <h3>Branching</h3>
+              <p>
+                Kembangkan fitur baru di cabang terpisah tanpa mengganggu kode
+                utama yang sudah stabil.
+              </p>
+            </div>
+            <div class="card">
+              <div class="card__icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M4 12h16M4 12l4-4M4 12l4 4" />
+                  <path d="M20 6v12" />
+                </svg>
+              </div>
+              <h3>Kerja Tim yang Rapi</h3>
+              <p>
+                Alur pull request dan code review membuat kolaborasi tim jadi
+                lebih terstruktur dan berkualitas.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+     4. GIT WORKFLOW
+     ============================================================ -->
+      <section class="section" id="alur-kerja">
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="eyebrow">Alur Kerja</span>
+            <h2 class="section-title">Git Workflow</h2>
+            <p class="section-desc">
+              Empat tahap perjalanan sebuah file, dari komputer lokal hingga
+              tersimpan di GitHub.
+            </p>
+          </div>
+
+          <div class="workflow reveal">
+            <div class="workflow-step">
+              <span class="num">01</span>
+              <h4>Working Directory</h4>
+              <p>Folder proyek tempat kamu menulis dan mengubah file.</p>
+            </div>
+            <div class="workflow-arrow" aria-hidden="true">
+              <svg width="28" height="16" viewBox="0 0 28 16">
+                <path
+                  d="M0 8h24M18 2l6 6-6 6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  fill="none"
+                />
+              </svg>
+            </div>
+            <div class="workflow-step">
+              <span class="num">02</span>
+              <h4>Staging Area</h4>
+              <p>
+                Area sementara untuk memilih perubahan mana yang akan disertakan
+                pada commit berikutnya.
+              </p>
+            </div>
+            <div class="workflow-arrow" aria-hidden="true">
+              <svg width="28" height="16" viewBox="0 0 28 16">
+                <path
+                  d="M0 8h24M18 2l6 6-6 6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  fill="none"
+                />
+              </svg>
+            </div>
+            <div class="workflow-step">
+              <span class="num">03</span>
+              <h4>Local Repository</h4>
+              <p>
+                Riwayat commit tersimpan permanen di folder
+                <code>.git</code> pada komputermu.
+              </p>
+            </div>
+            <div class="workflow-arrow" aria-hidden="true">
+              <svg width="28" height="16" viewBox="0 0 28 16">
+                <path
+                  d="M0 8h24M18 2l6 6-6 6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  fill="none"
+                />
+              </svg>
+            </div>
+            <div class="workflow-step">
+              <span class="num">04</span>
+              <h4>Remote Repository</h4>
+              <p>
+                Server seperti GitHub tempat kode dibagikan ke tim melalui
+                <code>git push</code>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+     5. GIT COMMANDS
+     ============================================================ -->
+      <section
+        class="section section--tight"
+        id="perintah"
+        style="background: var(--bg-soft)"
+      >
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="eyebrow">Referensi</span>
+            <h2 class="section-title">Perintah Git yang Wajib Diketahui</h2>
+            <p class="section-desc">
+              16 perintah dasar lengkap dengan penjelasan dan contoh
+              penggunaannya.
+            </p>
+          </div>
+          <div class="grid grid--3" id="commandGrid"></div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+     6. GIT LIFECYCLE
+     ============================================================ -->
+      <section class="section" id="lifecycle">
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="eyebrow">Siklus File</span>
+            <h2 class="section-title">Git Lifecycle</h2>
+            <p class="section-desc">
+              Setiap file dalam repository bergerak melalui lima status berikut.
+            </p>
+          </div>
+
+          <div class="lifecycle reveal">
+            <div class="lifecycle-node">
+              <span
+                class="dot"
+                style="background: #8b949e; margin: 0 auto 12px"
+              ></span>
+              <h4>Untracked</h4>
+              <p>File baru, belum dikenali Git.</p>
+            </div>
+            <div class="lifecycle-arrow" aria-hidden="true">
+              <svg width="24" height="14" viewBox="0 0 24 14">
+                <path
+                  d="M0 7h20M15 1l6 6-6 6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  fill="none"
+                />
+              </svg>
+            </div>
+            <div class="lifecycle-node">
+              <span class="dot" style="background: #d29922"></span>
+              <h4>Modified</h4>
+              <p>File sudah diubah dari versi terakhir.</p>
+            </div>
+            <div class="lifecycle-arrow" aria-hidden="true">
+              <svg width="24" height="14" viewBox="0 0 24 14">
+                <path
+                  d="M0 7h20M15 1l6 6-6 6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  fill="none"
+                />
+              </svg>
+            </div>
+            <div class="lifecycle-node">
+              <span class="dot" style="background: #58a6ff"></span>
+              <h4>Staged</h4>
+              <p>Ditandai untuk masuk ke commit berikutnya.</p>
+            </div>
+            <div class="lifecycle-arrow" aria-hidden="true">
+              <svg width="24" height="14" viewBox="0 0 24 14">
+                <path
+                  d="M0 7h20M15 1l6 6-6 6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  fill="none"
+                />
+              </svg>
+            </div>
+            <div class="lifecycle-node">
+              <span class="dot" style="background: #3fb950"></span>
+              <h4>Committed</h4>
+              <p>Tersimpan permanen di local repository.</p>
+            </div>
+            <div class="lifecycle-arrow" aria-hidden="true">
+              <svg width="24" height="14" viewBox="0 0 24 14">
+                <path
+                  d="M0 7h20M15 1l6 6-6 6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  fill="none"
+                />
+              </svg>
+            </div>
+            <div class="lifecycle-node">
+              <span class="dot" style="background: #238636"></span>
+              <h4>Remote</h4>
+              <p>Terkirim ke GitHub lewat <code>git push</code>.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+     7. GIT BRANCHING
+     ============================================================ -->
+      <section
+        class="section section--tight"
+        id="branching"
+        style="background: var(--bg-soft)"
+      >
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="eyebrow">Percabangan</span>
+            <h2 class="section-title">Git Branching</h2>
+            <p class="section-desc">
+              Branch memungkinkan pengembangan fitur berjalan paralel tanpa
+              mengganggu kode utama.
+            </p>
+          </div>
+
+          <div class="branch-diagram reveal">
+            <svg
+              viewBox="0 0 900 260"
+              width="100%"
+              role="img"
+              aria-label="Diagram percabangan Git menunjukkan branch main, feature-login, feature-dashboard, dan hotfix yang bergabung kembali ke main"
+            >
+              <!-- main line -->
+              <path
+                d="M40 130 H860"
+                stroke="#238636"
+                stroke-width="3"
+                fill="none"
+              />
+              <!-- feature-login branch -->
+              <path
+                d="M180 130 C220 130 220 50 260 50 H480 C520 50 520 130 560 130"
+                stroke="#58A6FF"
+                stroke-width="3"
+                fill="none"
+              />
+              <!-- feature-dashboard branch -->
+              <path
+                d="M320 130 C360 130 360 210 400 210 H620 C660 210 660 130 700 130"
+                stroke="#D29922"
+                stroke-width="3"
+                fill="none"
+              />
+              <!-- hotfix branch -->
+              <path
+                d="M600 130 C630 130 630 190 660 190 H720 C740 190 740 130 760 130"
+                stroke="#F85149"
+                stroke-width="3"
+                fill="none"
+              />
+
+              <!-- main commits -->
+              <circle cx="40" cy="130" r="7" fill="#238636" />
+              <circle cx="180" cy="130" r="7" fill="#238636" />
+              <circle cx="320" cy="130" r="7" fill="#238636" />
+              <circle cx="560" cy="130" r="7" fill="#238636" />
+              <circle cx="600" cy="130" r="7" fill="#238636" />
+              <circle cx="700" cy="130" r="7" fill="#238636" />
+              <circle cx="760" cy="130" r="7" fill="#238636" />
+              <circle cx="860" cy="130" r="7" fill="#238636" />
+
+              <!-- feature-login commits -->
+              <circle cx="260" cy="50" r="7" fill="#58A6FF" />
+              <circle cx="370" cy="50" r="7" fill="#58A6FF" />
+              <circle cx="480" cy="50" r="7" fill="#58A6FF" />
+
+              <!-- feature-dashboard commits -->
+              <circle cx="400" cy="210" r="7" fill="#D29922" />
+              <circle cx="510" cy="210" r="7" fill="#D29922" />
+              <circle cx="620" cy="210" r="7" fill="#D29922" />
+
+              <!-- hotfix commit -->
+              <circle cx="690" cy="190" r="7" fill="#F85149" />
+
+              <text
+                x="40"
+                y="115"
+                fill="#8B949E"
+                font-size="13"
+                font-family="ui-monospace,monospace"
+              >
+                main
+              </text>
+              <text
+                x="255"
+                y="35"
+                fill="#58A6FF"
+                font-size="13"
+                font-family="ui-monospace,monospace"
+              >
+                feature-login
+              </text>
+              <text
+                x="395"
+                y="235"
+                fill="#D29922"
+                font-size="13"
+                font-family="ui-monospace,monospace"
+              >
+                feature-dashboard
+              </text>
+              <text
+                x="650"
+                y="175"
+                fill="#F85149"
+                font-size="13"
+                font-family="ui-monospace,monospace"
+              >
+                hotfix
+              </text>
+              <text
+                x="555"
+                y="115"
+                fill="#8B949E"
+                font-size="12"
+                font-family="ui-monospace,monospace"
+              >
+                merge
+              </text>
+              <text
+                x="695"
+                y="115"
+                fill="#8B949E"
+                font-size="12"
+                font-family="ui-monospace,monospace"
+              >
+                merge
+              </text>
+            </svg>
+            <div class="branch-legend">
+              <span
+                ><i style="background: #238636"></i> main — kode stabil
+                produksi</span
+              >
+              <span
+                ><i style="background: #58a6ff"></i> feature-login —
+                pengembangan fitur login</span
+              >
+              <span
+                ><i style="background: #d29922"></i> feature-dashboard —
+                pengembangan dashboard</span
+              >
+              <span
+                ><i style="background: #f85149"></i> hotfix — perbaikan bug
+                mendesak</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+     8. GIT VS GITHUB
+     ============================================================ -->
+      <section class="section" id="git-vs-github">
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="eyebrow">Perbandingan</span>
+            <h2 class="section-title">Git vs GitHub vs GitLab vs Bitbucket</h2>
+            <p class="section-desc">
+              Git adalah alat, sedangkan GitHub, GitLab, dan Bitbucket adalah
+              layanan hosting yang menggunakan Git.
+            </p>
+          </div>
+
+          <div class="table-wrap reveal">
+            <table>
+              <thead>
+                <tr>
+                  <th>Aspek</th>
+                  <th>Git</th>
+                  <th>GitHub</th>
+                  <th>GitLab</th>
+                  <th>Bitbucket</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Jenis</td>
+                  <td>Software version control</td>
+                  <td>Layanan hosting repository</td>
+                  <td>Layanan hosting repository</td>
+                  <td>Layanan hosting repository</td>
+                </tr>
+                <tr>
+                  <td>Dijalankan</td>
+                  <td>Lokal di komputer</td>
+                  <td>Di cloud (server GitHub)</td>
+                  <td>Cloud atau self-hosted</td>
+                  <td>Cloud atau self-hosted</td>
+                </tr>
+                <tr>
+                  <td>Pemilik</td>
+                  <td>Open source, komunitas</td>
+                  <td>Microsoft</td>
+                  <td>GitLab Inc.</td>
+                  <td>Atlassian</td>
+                </tr>
+                <tr>
+                  <td>Fitur unggulan</td>
+                  <td>Commit, branch, merge</td>
+                  <td>Pull request, Actions, Pages</td>
+                  <td>CI/CD bawaan, DevOps lengkap</td>
+                  <td>Integrasi Jira &amp; Trello</td>
+                </tr>
+                <tr>
+                  <td>Wajib online?</td>
+                  <td>Tidak</td>
+                  <td>Ya, untuk kolaborasi</td>
+                  <td>Ya, untuk kolaborasi</td>
+                  <td>Ya, untuk kolaborasi</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+     9. BEST PRACTICES
+     ============================================================ -->
+      <section
+        class="section section--tight"
+        id="best-practices"
+        style="background: var(--bg-soft)"
+      >
+        <div class="container">
+          <div class="section-header section-header--center reveal">
+            <span class="eyebrow">Kebiasaan Baik</span>
+            <h2 class="section-title">Best Practices Menggunakan Git</h2>
+            <p class="section-desc">
+              Delapan kebiasaan yang membuat riwayat proyekmu tetap rapi dan
+              mudah dipahami tim.
+            </p>
+          </div>
+
+          <div class="grid grid--4 reveal-stagger">
+            <div class="card">
+              <span class="badge badge--primary">Commit</span>
+              <h3 style="margin-top: 12px">Meaningful Commit</h3>
+              <p>
+                Tulis pesan commit yang menjelaskan "kenapa", bukan sekadar
+                "apa".
+              </p>
+            </div>
+            <div class="card">
+              <span class="badge badge--primary">Commit</span>
+              <h3 style="margin-top: 12px">Small Commit</h3>
+              <p>
+                Satu commit untuk satu perubahan logis agar mudah ditelusuri dan
+                di-revert.
+              </p>
+            </div>
+            <div class="card">
+              <span class="badge badge--primary">Commit</span>
+              <h3 style="margin-top: 12px">Frequent Commit</h3>
+              <p>
+                Commit sesering mungkin saat progres jelas, jangan menumpuk
+                perubahan terlalu besar.
+              </p>
+            </div>
+            <div class="card">
+              <span class="badge badge--secondary">Branch</span>
+              <h3 style="margin-top: 12px">Branch per Feature</h3>
+              <p>
+                Buat branch terpisah untuk setiap fitur atau perbaikan agar main
+                tetap stabil.
+              </p>
+            </div>
+            <div class="card">
+              <span class="badge badge--secondary">Sinkronisasi</span>
+              <h3 style="margin-top: 12px">Pull Before Push</h3>
+              <p>
+                Tarik perubahan terbaru dengan <code>git pull</code> sebelum
+                mengirim perubahanmu.
+              </p>
+            </div>
+            <div class="card">
+              <span class="badge badge--danger">Keamanan</span>
+              <h3 style="margin-top: 12px">Never Commit Secrets</h3>
+              <p>
+                Jangan pernah commit API key, password, atau file kredensial ke
+                repository.
+              </p>
+            </div>
+            <div class="card">
+              <span class="badge badge--primary">Commit</span>
+              <h3 style="margin-top: 12px">Write Good Messages</h3>
+              <p>
+                Gunakan format konsisten, misalnya
+                <code>fix: perbaiki validasi form login</code>.
+              </p>
+            </div>
+            <div class="card">
+              <span class="badge badge--secondary">Konfigurasi</span>
+              <h3 style="margin-top: 12px">Use .gitignore</h3>
+              <p>
+                Abaikan file yang tidak perlu dilacak seperti
+                <code>node_modules/</code> atau file environment.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+     10. INTERACTIVE GIT PLAYGROUND
+     ============================================================ -->
+      <section class="section" id="playground">
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="eyebrow">Praktik Langsung</span>
+            <h2 class="section-title">Interactive Git Playground</h2>
+            <p class="section-desc">
+              Simulasikan alur kerja Git langsung di browser — tanpa instalasi,
+              tanpa backend.
+            </p>
+          </div>
+
+          <div class="playground reveal">
+            <div class="playground-controls">
+              <h3>Kontrol Simulasi</h3>
+              <p>
+                Klik tombol secara berurutan untuk mensimulasikan siklus kerja
+                Git yang sesungguhnya.
+              </p>
+              <div class="playground-buttons">
+                <button class="btn btn--primary btn--sm" data-action="init">
+                  Initialize Repository
+                </button>
+                <button class="btn btn--secondary btn--sm" data-action="add">
+                  Add File
+                </button>
+                <button class="btn btn--secondary btn--sm" data-action="stage">
+                  Stage
+                </button>
+                <button class="btn btn--secondary btn--sm" data-action="commit">
+                  Commit
+                </button>
+                <button class="btn btn--secondary btn--sm" data-action="push">
+                  Push
+                </button>
+                <button class="btn btn--ghost btn--sm" data-action="reset">
+                  Reset
+                </button>
+              </div>
+              <div class="playground-status">
+                <div class="status-row">
+                  <span>Status Repository</span
+                  ><strong id="statRepo">Belum diinisialisasi</strong>
+                </div>
+                <div class="status-row">
+                  <span>File di Working Directory</span
+                  ><strong id="statWorking">0</strong>
+                </div>
+                <div class="status-row">
+                  <span>Commit Lokal</span><strong id="statCommits">0</strong>
+                </div>
+                <div class="status-row">
+                  <span>Commit Terkirim ke Remote</span
+                  ><strong id="statPushed">0</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="repo-zones">
+              <div class="repo-zone">
+                <h5><i style="background: #8b949e"></i> Working Directory</h5>
+                <div id="zoneWorking">
+                  <p class="repo-empty">Belum ada file.</p>
+                </div>
+              </div>
+              <div class="repo-zone">
+                <h5><i style="background: #58a6ff"></i> Staging Area</h5>
+                <div id="zoneStaging">
+                  <p class="repo-empty">Belum ada file yang di-stage.</p>
+                </div>
+              </div>
+              <div class="repo-zone">
+                <h5><i style="background: #3fb950"></i> Local Repository</h5>
+                <div id="zoneLocal">
+                  <p class="repo-empty">Belum ada commit.</p>
+                </div>
+              </div>
+              <div class="repo-zone">
+                <h5>
+                  <i style="background: #238636"></i> Remote Repository (GitHub)
+                </h5>
+                <div id="zoneRemote">
+                  <p class="repo-empty">Belum ada commit yang di-push.</p>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="playground-console"
+              id="playgroundConsole"
+              aria-live="polite"
+            >
+              <div class="line">
+                <span class="p">$</span> Selamat datang di Git Playground. Klik
+                "Initialize Repository" untuk mulai.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+     11. GIT CHEAT SHEET
+     ============================================================ -->
+      <section
+        class="section section--tight"
+        id="cheat-sheet"
+        style="background: var(--bg-soft)"
+      >
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="eyebrow">Referensi Cepat</span>
+            <h2 class="section-title">Git Cheat Sheet</h2>
+            <p class="section-desc">
+              Rangkuman perintah paling sering dipakai, dikelompokkan
+              berdasarkan fungsinya.
+            </p>
+          </div>
+
+          <div class="grid grid--3 reveal-stagger">
+            <div class="card cheat-group">
+              <h4>Repository</h4>
+              <div class="cheat-row">
+                <code>git init</code><span>Buat repository baru</span>
+              </div>
+              <div class="cheat-row">
+                <code>git clone &lt;url&gt;</code><span>Salin repository</span>
+              </div>
+              <div class="cheat-row">
+                <code>git status</code><span>Cek status file</span>
+              </div>
+            </div>
+            <div class="card cheat-group">
+              <h4>Branch</h4>
+              <div class="cheat-row">
+                <code>git branch</code><span>Lihat/buat branch</span>
+              </div>
+              <div class="cheat-row">
+                <code>git switch &lt;nama&gt;</code><span>Pindah branch</span>
+              </div>
+              <div class="cheat-row">
+                <code>git merge &lt;nama&gt;</code><span>Gabungkan branch</span>
+              </div>
+            </div>
+            <div class="card cheat-group">
+              <h4>Remote</h4>
+              <div class="cheat-row">
+                <code>git remote -v</code><span>Lihat remote</span>
+              </div>
+              <div class="cheat-row">
+                <code>git push</code><span>Kirim commit</span>
+              </div>
+              <div class="cheat-row">
+                <code>git fetch</code><span>Ambil data terbaru</span>
+              </div>
+            </div>
+            <div class="card cheat-group">
+              <h4>History</h4>
+              <div class="cheat-row">
+                <code>git log</code><span>Lihat riwayat commit</span>
+              </div>
+              <div class="cheat-row">
+                <code>git diff</code><span>Lihat perbedaan file</span>
+              </div>
+              <div class="cheat-row">
+                <code>git show &lt;hash&gt;</code
+                ><span>Detail satu commit</span>
+              </div>
+            </div>
+            <div class="card cheat-group">
+              <h4>Undo</h4>
+              <div class="cheat-row">
+                <code>git reset &lt;file&gt;</code><span>Batalkan staging</span>
+              </div>
+              <div class="cheat-row">
+                <code>git checkout -- .</code><span>Buang perubahan lokal</span>
+              </div>
+              <div class="cheat-row">
+                <code>git revert &lt;hash&gt;</code
+                ><span>Batalkan commit dengan aman</span>
+              </div>
+            </div>
+            <div class="card cheat-group">
+              <h4>Tag</h4>
+              <div class="cheat-row">
+                <code>git tag</code><span>Lihat semua tag</span>
+              </div>
+              <div class="cheat-row">
+                <code>git tag v1.0</code><span>Buat tag versi</span>
+              </div>
+              <div class="cheat-row">
+                <code>git push --tags</code><span>Kirim tag ke remote</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+     12. LEARNING ROADMAP
+     ============================================================ -->
+      <section class="section" id="roadmap">
+        <div class="container">
+          <div class="section-header reveal">
+            <span class="eyebrow">Peta Belajar</span>
+            <h2 class="section-title">Learning Roadmap</h2>
+            <p class="section-desc">
+              Urutan belajar yang disarankan agar pemahamanmu terhadap Git
+              terbangun bertahap.
+            </p>
+          </div>
+
+          <div class="timeline reveal" style="max-width: 640px">
+            <div class="timeline-item">
+              <h4>1. Git Basics</h4>
+              <p>Instalasi, konfigurasi, init, add, commit, dan status.</p>
+            </div>
+            <div class="timeline-item">
+              <h4>2. Branch</h4>
+              <p>
+                Membuat, berpindah, dan mengelola branch untuk fitur terpisah.
+              </p>
+            </div>
+            <div class="timeline-item">
+              <h4>3. Merge</h4>
+              <p>
+                Menggabungkan hasil kerja dari beberapa branch ke satu branch
+                utama.
+              </p>
+            </div>
+            <div class="timeline-item">
+              <h4>4. Conflict</h4>
+              <p>
+                Memahami dan menyelesaikan konflik saat dua perubahan
+                bertabrakan.
+              </p>
+            </div>
+            <div class="timeline-item">
+              <h4>5. GitHub</h4>
+              <p>
+                Menghubungkan repository lokal ke remote repository di GitHub.
+              </p>
+            </div>
+            <div class="timeline-item">
+              <h4>6. Pull Request</h4>
+              <p>
+                Mengajukan perubahan untuk direview sebelum digabung ke branch
+                utama.
+              </p>
+            </div>
+            <div class="timeline-item">
+              <h4>7. Collaboration</h4>
+              <p>
+                Bekerja dalam tim dengan alur branching dan code review yang
+                jelas.
+              </p>
+            </div>
+            <div class="timeline-item">
+              <h4>8. CI/CD</h4>
+              <p>
+                Mengotomatisasi testing dan deployment setiap ada perubahan
+                kode.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+     13. FAQ
+     ============================================================ -->
+      <section class="section" id="pemateri">
+        <div class="container">
+          <div class="section-header section-header--center reveal">
+            <span class="eyebrow">Tentang Pemateri</span>
+            <h2 class="section-title">Dibuat &amp; Dibawakan Oleh</h2>
+            <p class="section-desc">
+              Kenali siapa yang merancang dan menyampaikan workshop ini.
+            </p>
+          </div>
+          <div class="reveal">
+            <div class="speaker-card">
+              <img
+                src="https://event-hub.id/api/uploads/CT7ZJ3H-OUD9Y40.png"
+                alt="Foto Andika Prasetiawan"
+                class="speaker-avatar"
+                loading="lazy"
+              />
+              <div class="speaker-info">
+                <h3>Andika Prasetiawan</h3>
+                <p class="speaker-role">Pemateri &amp; Pembuat Website</p>
+                <p class="speaker-bio">
+                  Merancang dan membawakan Workshop Git Fundamentals ini dari
+                  awal — mulai dari materi, simulasi interaktif, hingga tampilan
+                  website yang kamu lihat sekarang.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="section section--tight"
+        id="faq"
+        style="background: var(--bg-soft)"
+      >
+        <div class="container">
+          <div class="section-header section-header--center reveal">
+            <span class="eyebrow">Pertanyaan Umum</span>
+            <h2 class="section-title">FAQ</h2>
+            <p class="section-desc">
+              Pertanyaan yang paling sering muncul dari peserta workshop.
+            </p>
+          </div>
+
+          <div
+            style="max-width: 720px; margin-inline: auto"
+            class="reveal"
+            id="faqList"
+          ></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ============================================================
+     14. FOOTER
+     ============================================================ -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              <rect
+                width="32"
+                height="32"
+                rx="8"
+                fill="#161B22"
+                stroke="rgba(255,255,255,.1)"
+              />
+              <circle cx="10" cy="9" r="3" fill="#58A6FF" />
+              <circle cx="10" cy="23" r="3" fill="#238636" />
+              <circle cx="22" cy="16" r="3" fill="#238636" />
+              <path
+                d="M10 12v8M10 14.5c0 1.5 1.7 1.5 3.5 1.5 4 0 5 0 8.5 0v-3"
+                stroke="#F0F6FC"
+                stroke-width="1.4"
+                fill="none"
+                stroke-linecap="round"
+              />
+            </svg>
+            <span>Workshop Git Fundamentals</span>
+          </div>
+          <div class="footer-meta">
+            <span>❤️ Dibuat dengan sepenuh hati</span>
+            <span>✅ Siap untuk GitHub Pages</span>
+            <span>🇮🇩 Materi Berbahasa Indonesia</span>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          &copy; 2026 Workshop Git Fundamentals. Materi ini bebas digunakan
+          untuk kebutuhan belajar.
+        </div>
+      </div>
+    </footer>
+
+    <button
+      class="back-to-top"
+      id="backToTop"
+      aria-label="Kembali ke atas halaman"
+    >
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
+    </button>
+
+    <div class="toast-region" id="toastRegion" aria-live="polite"></div>
+
+    <script>
+      (function () {
+        "use strict";
+
+        /* ============================================================
+     UTILITIES
+     ============================================================ */
+        function $(sel, ctx) {
+          return (ctx || document).querySelector(sel);
+        }
+        function $all(sel, ctx) {
+          return Array.prototype.slice.call(
+            (ctx || document).querySelectorAll(sel),
+          );
+        }
+
+        /* ============================================================
+     TOAST NOTIFICATIONS
+     ============================================================ */
+        function showToast(message) {
+          var region = $("#toastRegion");
+          var toast = document.createElement("div");
+          toast.className = "toast";
+          toast.setAttribute("role", "status");
+          toast.innerHTML =
+            '<span class="toast__dot"></span><span>' + message + "</span>";
+          region.appendChild(toast);
+          setTimeout(function () {
+            toast.classList.add("leaving");
+            setTimeout(function () {
+              toast.remove();
+            }, 260);
+          }, 2600);
+        }
+
+        /* ============================================================
+     RIPPLE EFFECT ON BUTTONS
+     ============================================================ */
+        document.addEventListener("click", function (e) {
+          var btn = e.target.closest(".btn");
+          if (!btn) return;
+          var rect = btn.getBoundingClientRect();
+          var ripple = document.createElement("span");
+          var size = Math.max(rect.width, rect.height);
+          ripple.className = "ripple";
+          ripple.style.width = ripple.style.height = size + "px";
+          ripple.style.left = e.clientX - rect.left - size / 2 + "px";
+          ripple.style.top = e.clientY - rect.top - size / 2 + "px";
+          btn.appendChild(ripple);
+          setTimeout(function () {
+            ripple.remove();
+          }, 620);
+        });
+
+        /* ============================================================
+     NAV: mobile toggle
+     ============================================================ */
+        var navToggle = $("#navToggle");
+        var navLinks = $("#navLinks");
+        navToggle.addEventListener("click", function () {
+          var isOpen = navLinks.classList.toggle("is-open");
+          navToggle.classList.toggle("is-open", isOpen);
+          navToggle.setAttribute("aria-expanded", isOpen);
+        });
+        $all("#navLinks a").forEach(function (link) {
+          link.addEventListener("click", function () {
+            navLinks.classList.remove("is-open");
+            navToggle.classList.remove("is-open");
+            navToggle.setAttribute("aria-expanded", "false");
+          });
+        });
+
+        /* ============================================================
+     NAV: active link highlight + progress bar via scroll
+     ============================================================ */
+        var sections = $all("main section[id]");
+        var navAnchors = $all('#navLinks a[href^="#"]');
+        var progressBar = $("#progressBar");
+        var backToTop = $("#backToTop");
+
+        function onScroll() {
+          var scrollTop = window.scrollY || document.documentElement.scrollTop;
+          var docHeight =
+            document.documentElement.scrollHeight - window.innerHeight;
+          progressBar.style.width =
+            (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + "%";
+
+          backToTop.classList.toggle("is-visible", scrollTop > 600);
+
+          var current = "";
+          sections.forEach(function (sec) {
+            var top = sec.offsetTop - 140;
+            if (scrollTop >= top) current = sec.id;
+          });
+          navAnchors.forEach(function (a) {
+            var match = a.getAttribute("href") === "#" + current;
+            a.classList.toggle("active", match);
+          });
+        }
+        document.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+
+        backToTop.addEventListener("click", function () {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        /* ============================================================
+     SCROLL REVEAL (IntersectionObserver)
+     ============================================================ */
+        var revealTargets = $all(".reveal, .reveal-stagger");
+        if ("IntersectionObserver" in window) {
+          var io = new IntersectionObserver(
+            function (entries) {
+              entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add("is-visible");
+                  io.unobserve(entry.target);
+                }
+              });
+            },
+            { threshold: 0.15, rootMargin: "0px 0px -60px 0px" },
+          );
+          revealTargets.forEach(function (t) {
+            io.observe(t);
+          });
+        } else {
+          revealTargets.forEach(function (t) {
+            t.classList.add("is-visible");
+          });
+        }
+
+        /* ============================================================
+     HERO: typing effect + count animation
+     ============================================================ */
+        var typingEl = $("#typing-line");
+        var typingText = "git init";
+        var ti = 0;
+        function typeChar() {
+          if (ti <= typingText.length) {
+            typingEl.textContent = typingText.slice(0, ti);
+            ti++;
+            setTimeout(typeChar, 130);
+          }
+        }
+        setTimeout(typeChar, 500);
+
+        var countEls = $all("[data-count]");
+        var counted = false;
+        function animateCounts() {
+          if (counted) return;
+          counted = true;
+          countEls.forEach(function (el) {
+            var target = parseInt(el.getAttribute("data-count"), 10);
+            var current = 0;
+            var step = Math.max(1, Math.ceil(target / 40));
+            var timer = setInterval(function () {
+              current += step;
+              if (current >= target) {
+                current = target;
+                clearInterval(timer);
+              }
+              el.textContent = current;
+            }, 30);
+          });
+        }
+        if ("IntersectionObserver" in window) {
+          var statObserver = new IntersectionObserver(
+            function (entries) {
+              entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                  animateCounts();
+                  statObserver.disconnect();
+                }
+              });
+            },
+            { threshold: 0.4 },
+          );
+          var statBlock = $(".hero-stats");
+          if (statBlock) statObserver.observe(statBlock);
+        } else {
+          animateCounts();
+        }
+
+        /* ============================================================
+     GIT COMMANDS DATA + RENDER
+     ============================================================ */
+        var commands = [
+          {
+            cmd: "git init",
+            desc: "Membuat repository Git baru di folder saat ini.",
+            ex: "git init",
+          },
+          {
+            cmd: "git status",
+            desc: "Menampilkan status file: mana yang berubah, staged, atau belum dilacak.",
+            ex: "git status",
+          },
+          {
+            cmd: "git add",
+            desc: "Memindahkan perubahan file dari working directory ke staging area.",
+            ex: "git add index.html",
+          },
+          {
+            cmd: "git commit",
+            desc: "Menyimpan perubahan yang sudah di-stage sebagai satu titik riwayat baru.",
+            ex: 'git commit -m "menambah halaman utama"',
+          },
+          {
+            cmd: "git log",
+            desc: "Menampilkan riwayat commit lengkap dengan hash, penulis, dan pesan.",
+            ex: "git log --oneline",
+          },
+          {
+            cmd: "git branch",
+            desc: "Menampilkan daftar branch atau membuat branch baru.",
+            ex: "git branch fitur-login",
+          },
+          {
+            cmd: "git checkout",
+            desc: "Berpindah branch atau memulihkan file ke versi sebelumnya.",
+            ex: "git checkout fitur-login",
+          },
+          {
+            cmd: "git switch",
+            desc: "Perintah modern khusus untuk berpindah antar branch.",
+            ex: "git switch main",
+          },
+          {
+            cmd: "git merge",
+            desc: "Menggabungkan riwayat dari satu branch ke branch yang sedang aktif.",
+            ex: "git merge fitur-login",
+          },
+          {
+            cmd: "git pull",
+            desc: "Mengambil sekaligus menggabungkan perubahan terbaru dari remote repository.",
+            ex: "git pull origin main",
+          },
+          {
+            cmd: "git push",
+            desc: "Mengirim commit dari repository lokal ke remote repository.",
+            ex: "git push origin main",
+          },
+          {
+            cmd: "git clone",
+            desc: "Menyalin repository remote secara utuh ke komputer lokal.",
+            ex: "git clone https://github.com/user/repo.git",
+          },
+          {
+            cmd: "git remote",
+            desc: "Mengelola koneksi ke repository remote seperti GitHub.",
+            ex: "git remote add origin <url>",
+          },
+          {
+            cmd: "git fetch",
+            desc: "Mengambil data terbaru dari remote tanpa menggabungkannya secara otomatis.",
+            ex: "git fetch origin",
+          },
+          {
+            cmd: "git stash",
+            desc: "Menyimpan sementara perubahan yang belum siap di-commit.",
+            ex: "git stash",
+          },
+          {
+            cmd: "git tag",
+            desc: "Menandai commit tertentu sebagai versi rilis, misalnya v1.0.0.",
+            ex: "git tag v1.0.0",
+          },
+        ];
+        var commandGrid = $("#commandGrid");
+        commandGrid.innerHTML = commands
+          .map(function (c) {
+            return (
+              '<div class="command-card">' +
+              '<span class="command-card__cmd">' +
+              c.cmd +
+              "</span>" +
+              '<p class="command-card__desc">' +
+              c.desc +
+              "</p>" +
+              '<div class="command-card__example">$ ' +
+              c.ex +
+              "</div>" +
+              "</div>"
+            );
+          })
+          .join("");
+
+        /* ============================================================
+     FAQ DATA + ACCORDION
+     ============================================================ */
+        var faqs = [
+          {
+            q: "Apa bedanya Git dan GitHub?",
+            a: "Git adalah software version control yang berjalan di komputer lokal, sedangkan GitHub adalah layanan online yang menghosting repository Git sekaligus menambahkan fitur kolaborasi seperti pull request dan issue tracking.",
+          },
+          {
+            q: "Apakah Git harus online?",
+            a: "Tidak. Git bisa digunakan sepenuhnya secara offline karena setiap repository lokal menyimpan riwayat commit secara lengkap. Koneksi internet hanya dibutuhkan saat push, pull, atau fetch ke remote repository.",
+          },
+          {
+            q: "Apa itu Commit?",
+            a: "Commit adalah sebuah titik simpan yang mencatat perubahan file pada waktu tertentu, lengkap dengan pesan penjelasan, penulis, dan hash unik sebagai identitasnya.",
+          },
+          {
+            q: "Apa itu Branch?",
+            a: "Branch adalah cabang pengembangan terpisah dari kode utama, sehingga fitur baru bisa dikerjakan tanpa mengganggu kode yang sudah stabil di branch main.",
+          },
+          {
+            q: "Bagaimana jika terjadi merge conflict?",
+            a: "Merge conflict terjadi saat dua perubahan bertabrakan pada baris yang sama. Git akan menandai bagian yang konflik pada file, lalu kamu perlu memilih atau menggabungkan perubahan secara manual sebelum melanjutkan commit.",
+          },
+          {
+            q: "Apakah Git cocok untuk pemula?",
+            a: "Sangat cocok. Konsep dasarnya seperti init, add, dan commit relatif mudah dipahami, dan workshop ini dirancang khusus untuk membantumu memulai dari nol.",
+          },
+        ];
+        var faqList = $("#faqList");
+        faqList.innerHTML = faqs
+          .map(function (f, i) {
+            return (
+              '<div class="accordion-item">' +
+              '<button class="accordion-trigger" aria-expanded="false" aria-controls="faq-panel-' +
+              i +
+              '" id="faq-trigger-' +
+              i +
+              '">' +
+              "<span>" +
+              f.q +
+              "</span>" +
+              '<span class="icon" aria-hidden="true">' +
+              '<svg width="12" height="12" viewBox="0 0 12 12"><path d="M6 0v12M0 6h12" stroke="currentColor" stroke-width="1.6"/></svg>' +
+              "</span>" +
+              "</button>" +
+              '<div class="accordion-panel" id="faq-panel-' +
+              i +
+              '" role="region" aria-labelledby="faq-trigger-' +
+              i +
+              '">' +
+              '<div class="accordion-panel__inner">' +
+              f.a +
+              "</div>" +
+              "</div>" +
+              "</div>"
+            );
+          })
+          .join("");
+
+        $all(".accordion-trigger").forEach(function (trigger) {
+          trigger.addEventListener("click", function () {
+            var expanded = trigger.getAttribute("aria-expanded") === "true";
+            var panel = document.getElementById(
+              trigger.getAttribute("aria-controls"),
+            );
+            trigger.setAttribute("aria-expanded", String(!expanded));
+            panel.style.maxHeight = expanded
+              ? "0px"
+              : panel.scrollHeight + "px";
+          });
+        });
+
+        /* ============================================================
+     INTERACTIVE GIT PLAYGROUND
+     ============================================================ */
+        var repo = {
+          initialized: false,
+          fileCounter: 0,
+          working: [], // untracked/modified files
+          staging: [], // staged files
+          commits: [], // local commits [{id, msg, files}]
+          pushed: 0, // number of commits pushed to remote
+        };
+
+        var consoleEl = $("#playgroundConsole");
+        function logConsole(text) {
+          var line = document.createElement("div");
+          line.className = "line";
+          line.innerHTML = '<span class="p">$</span> ' + text;
+          consoleEl.appendChild(line);
+          consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
+        function renderZone(id, items, emptyText, renderItem) {
+          var el = document.getElementById(id);
+          if (items.length === 0) {
+            el.innerHTML = '<p class="repo-empty">' + emptyText + "</p>";
+            return;
+          }
+          el.innerHTML = items.map(renderItem).join("");
+        }
+
+        function renderPlayground() {
+          renderZone(
+            "zoneWorking",
+            repo.working,
+            "Belum ada file.",
+            function (f) {
+              return (
+                '<div class="repo-file"><span>' +
+                f +
+                '</span><span class="tag">untracked</span></div>'
+              );
+            },
+          );
+          renderZone(
+            "zoneStaging",
+            repo.staging,
+            "Belum ada file yang di-stage.",
+            function (f) {
+              return (
+                '<div class="repo-file"><span>' +
+                f +
+                '</span><span class="tag">staged</span></div>'
+              );
+            },
+          );
+          renderZone(
+            "zoneLocal",
+            repo.commits,
+            "Belum ada commit.",
+            function (c) {
+              return (
+                '<div class="repo-file"><span>' +
+                c.id +
+                " — " +
+                c.msg +
+                '</span><span class="tag">' +
+                c.files.length +
+                " file</span></div>"
+              );
+            },
+          );
+          var pushedCommits = repo.commits.slice(0, repo.pushed);
+          renderZone(
+            "zoneRemote",
+            pushedCommits,
+            "Belum ada commit yang di-push.",
+            function (c) {
+              return (
+                '<div class="repo-file"><span>' +
+                c.id +
+                " — " +
+                c.msg +
+                '</span><span class="tag">origin/main</span></div>'
+              );
+            },
+          );
+
+          $("#statRepo").textContent = repo.initialized
+            ? "Aktif (main)"
+            : "Belum diinisialisasi";
+          $("#statWorking").textContent =
+            repo.working.length + repo.staging.length;
+          $("#statCommits").textContent = repo.commits.length;
+          $("#statPushed").textContent = repo.pushed;
+        }
+
+        function randomHash() {
+          return Math.random().toString(16).slice(2, 9);
+        }
+
+        var actions = {
+          init: function () {
+            if (repo.initialized) {
+              showToast("Repository sudah diinisialisasi.");
+              return;
+            }
+            repo.initialized = true;
+            logConsole("git init");
+            logConsole(
+              "Initialized empty Git repository in ~/workshop-git/.git/",
+            );
+            showToast("Repository berhasil diinisialisasi!");
+          },
+          add: function () {
+            if (!repo.initialized) {
+              showToast("Inisialisasi repository terlebih dahulu.");
+              return;
+            }
+            repo.fileCounter++;
+            var name = "file-" + repo.fileCounter + ".txt";
+            repo.working.push(name);
+            logConsole(
+              "touch " + name + '  <span class="p">#</span> file baru dibuat',
+            );
+            showToast('File "' + name + '" ditambahkan ke working directory.');
+          },
+          stage: function () {
+            if (!repo.initialized) {
+              showToast("Inisialisasi repository terlebih dahulu.");
+              return;
+            }
+            if (repo.working.length === 0) {
+              showToast("Tidak ada file untuk di-stage.");
+              return;
+            }
+            logConsole("git add .");
+            repo.staging = repo.staging.concat(repo.working);
+            repo.working = [];
+            showToast("Semua file dipindahkan ke staging area.");
+          },
+          commit: function () {
+            if (!repo.initialized) {
+              showToast("Inisialisasi repository terlebih dahulu.");
+              return;
+            }
+            if (repo.staging.length === 0) {
+              showToast("Tidak ada file di staging area untuk di-commit.");
+              return;
+            }
+            var id = randomHash();
+            var msg = "Commit #" + (repo.commits.length + 1);
+            repo.commits.unshift({
+              id: id,
+              msg: msg,
+              files: repo.staging.slice(),
+            });
+            logConsole('git commit -m "' + msg + '"');
+            logConsole(
+              "[main " +
+                id +
+                "] " +
+                msg +
+                " — " +
+                repo.staging.length +
+                " file(s) changed",
+            );
+            repo.staging = [];
+            showToast("Commit baru dibuat: " + id);
+          },
+          push: function () {
+            if (!repo.initialized) {
+              showToast("Inisialisasi repository terlebih dahulu.");
+              return;
+            }
+            if (repo.pushed >= repo.commits.length) {
+              showToast("Tidak ada commit baru untuk di-push.");
+              return;
+            }
+            var newlyPushed = repo.commits.length - repo.pushed;
+            repo.pushed = repo.commits.length;
+            logConsole("git push origin main");
+            logConsole(
+              newlyPushed + " commit berhasil dikirim ke remote repository.",
+            );
+            showToast(newlyPushed + " commit berhasil di-push ke GitHub!");
+          },
+          reset: function () {
+            repo = {
+              initialized: false,
+              fileCounter: 0,
+              working: [],
+              staging: [],
+              commits: [],
+              pushed: 0,
+            };
+            consoleEl.innerHTML =
+              '<div class="line"><span class="p">$</span> Simulasi direset. Klik "Initialize Repository" untuk mulai lagi.</div>';
+            showToast("Simulasi playground direset.");
+          },
+        };
+
+        $all(".playground-buttons [data-action]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            actions[btn.getAttribute("data-action")]();
+            renderPlayground();
+          });
+        });
+        renderPlayground();
+      })();
+    </script>
+  </body>
+</html>
