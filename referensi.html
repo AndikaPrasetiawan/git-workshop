@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet Git — Workshop Git &amp; GitHub</title>
+<meta name="description" content="Referensi cepat perintah-perintah Git yang paling sering dipakai, dikelompokkan per kategori.">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Lewati ke konten utama</a>
+
+<header class="topbar">
+  <button class="icon-btn menu-toggle" data-menu-toggle aria-label="Buka menu" aria-expanded="false">☰</button>
+  <a class="brand" href="index.html">
+    <span class="logo-mark">git</span>
+    <span>Workshop Git &amp; GitHub</span>
+  </a>
+  <div class="topbar-spacer"></div>
+  <a class="gh-link" href="https://github.com/" target="_blank" rel="noopener">
+    <span>⭐</span><span>Lihat di GitHub</span>
+  </a>
+  <button class="icon-btn" data-theme-toggle aria-label="Ganti tema">🌙</button>
+</header>
+
+<div class="sidebar-backdrop" data-sidebar-backdrop></div>
+
+<div class="layout">
+  <nav class="sidebar" aria-label="Navigasi modul">
+    <div class="side-group">
+      <div class="side-group-title">Mulai</div>
+      <a class="side-link" href="index.html"><span class="num">•</span> Beranda</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Presentasi</div>
+      <a class="side-link" href="slide.html" target="_blank" rel="noopener"><span class="num">▶</span> Slide Workshop</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Modul</div>
+      <a class="side-link" href="modul-01-pengenalan.html"><span class="num">1</span> Pengenalan Git &amp; VCS</a>
+      <a class="side-link" href="modul-02-instalasi.html"><span class="num">2</span> Instalasi &amp; Konfigurasi</a>
+      <a class="side-link" href="modul-03-dasar-git.html"><span class="num">3</span> Perintah Dasar Git</a>
+      <a class="side-link" href="modul-04-branching.html"><span class="num">4</span> Branching &amp; Merging</a>
+      <a class="side-link" href="modul-05-remote-github.html"><span class="num">5</span> Remote &amp; GitHub</a>
+      <a class="side-link" href="modul-06-kolaborasi.html"><span class="num">6</span> Kolaborasi &amp; Pull Request</a>
+      <a class="side-link" href="modul-07-best-practices.html"><span class="num">7</span> Best Practices</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Praktek</div>
+      <a class="side-link" href="latihan.html"><span class="num">✎</span> Latihan Praktek</a>
+      <a class="side-link" href="referensi.html"><span class="num">≡</span> Cheat Sheet</a>
+    </div>
+  </nav>
+
+  <main class="content" id="main">
+    <div class="page-header">
+      <div class="badge-row">
+        <span class="badge accent">Referensi Cepat</span>
+      </div>
+      <h1>Cheat Sheet Git</h1>
+      <p class="lead">Kumpulan perintah yang paling sering dipakai sehari-hari, dikelompokkan per kategori. Bookmark halaman ini.</p>
+    </div>
+
+    <h2 id="konfigurasi">Konfigurasi</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Perintah</th><th>Fungsi</th></tr></thead>
+        <tbody>
+          <tr><td><code>git config --global user.name "Nama"</code></td><td>Atur nama untuk commit</td></tr>
+          <tr><td><code>git config --global user.email "email"</code></td><td>Atur email untuk commit</td></tr>
+          <tr><td><code>git config --list</code></td><td>Lihat semua konfigurasi aktif</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="dasar">Dasar</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Perintah</th><th>Fungsi</th></tr></thead>
+        <tbody>
+          <tr><td><code>git init</code></td><td>Mulai repository baru di folder saat ini</td></tr>
+          <tr><td><code>git status</code></td><td>Lihat kondisi working directory &amp; staging area</td></tr>
+          <tr><td><code>git add &lt;file&gt;</code></td><td>Stage file tertentu</td></tr>
+          <tr><td><code>git add .</code></td><td>Stage semua perubahan</td></tr>
+          <tr><td><code>git commit -m "pesan"</code></td><td>Simpan snapshot dari staging area</td></tr>
+          <tr><td><code>git commit -am "pesan"</code></td><td>Stage file yang sudah dilacak + commit sekaligus</td></tr>
+          <tr><td><code>git log --oneline</code></td><td>Riwayat commit versi ringkas</td></tr>
+          <tr><td><code>git diff</code></td><td>Lihat perubahan yang belum di-stage</td></tr>
+          <tr><td><code>git diff --staged</code></td><td>Lihat perubahan yang sudah di-stage</td></tr>
+          <tr><td><code>git show &lt;hash&gt;</code></td><td>Lihat detail satu commit</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="branching">Branching &amp; Merging</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Perintah</th><th>Fungsi</th></tr></thead>
+        <tbody>
+          <tr><td><code>git branch</code></td><td>Lihat daftar branch lokal</td></tr>
+          <tr><td><code>git branch &lt;nama&gt;</code></td><td>Buat branch baru</td></tr>
+          <tr><td><code>git switch &lt;nama&gt;</code></td><td>Pindah ke branch tertentu</td></tr>
+          <tr><td><code>git switch -c &lt;nama&gt;</code></td><td>Buat sekaligus pindah ke branch baru</td></tr>
+          <tr><td><code>git branch -d &lt;nama&gt;</code></td><td>Hapus branch yang sudah di-merge</td></tr>
+          <tr><td><code>git merge &lt;nama&gt;</code></td><td>Gabungkan branch ke branch aktif saat ini</td></tr>
+          <tr><td><code>git merge --abort</code></td><td>Batalkan merge yang sedang konflik</td></tr>
+          <tr><td><code>git log --oneline --graph --all</code></td><td>Visualisasi riwayat semua branch</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="remote">Remote &amp; GitHub</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Perintah</th><th>Fungsi</th></tr></thead>
+        <tbody>
+          <tr><td><code>git clone &lt;url&gt;</code></td><td>Unduh repo dari remote beserta riwayatnya</td></tr>
+          <tr><td><code>git remote add origin &lt;url&gt;</code></td><td>Hubungkan repo lokal ke remote</td></tr>
+          <tr><td><code>git remote -v</code></td><td>Lihat daftar remote yang terhubung</td></tr>
+          <tr><td><code>git push -u origin main</code></td><td>Push pertama kali + set upstream branch</td></tr>
+          <tr><td><code>git push</code></td><td>Kirim commit lokal ke remote</td></tr>
+          <tr><td><code>git fetch</code></td><td>Unduh perubahan remote tanpa merge</td></tr>
+          <tr><td><code>git pull</code></td><td>Unduh + merge perubahan remote (fetch + merge)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="undo">Undo &amp; Perbaikan</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Perintah</th><th>Fungsi</th></tr></thead>
+        <tbody>
+          <tr><td><code>git restore &lt;file&gt;</code></td><td>Buang perubahan pada file (belum di-stage), kembalikan ke versi terakhir commit</td></tr>
+          <tr><td><code>git restore --staged &lt;file&gt;</code></td><td>Batalkan staging (unstage), perubahan file tetap ada</td></tr>
+          <tr><td><code>git commit --amend</code></td><td>Perbaiki pesan/isi commit terakhir (sebelum di-push)</td></tr>
+          <tr><td><code>git revert &lt;hash&gt;</code></td><td>Buat commit baru yang membatalkan efek commit tertentu (aman untuk riwayat yang sudah di-push)</td></tr>
+          <tr><td><code>git reset --soft &lt;hash&gt;</code></td><td>Mundur ke commit tertentu, perubahan tetap di staging area</td></tr>
+          <tr><td><code>git reset --hard &lt;hash&gt;</code></td><td>Mundur ke commit tertentu, buang semua perubahan setelahnya (hati-hati, destruktif)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="lainnya">Lainnya yang Sering Dipakai</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Perintah</th><th>Fungsi</th></tr></thead>
+        <tbody>
+          <tr><td><code>git stash</code></td><td>Simpan sementara perubahan yang belum siap di-commit, kembalikan working directory ke kondisi bersih</td></tr>
+          <tr><td><code>git stash pop</code></td><td>Kembalikan perubahan terakhir yang di-stash</td></tr>
+          <tr><td><code>git rm &lt;file&gt;</code></td><td>Hapus file dari working directory sekaligus dari tracking Git</td></tr>
+          <tr><td><code>git rm --cached &lt;file&gt;</code></td><td>Berhenti melacak file, tapi file tetap ada di komputer (dipakai bareng .gitignore)</td></tr>
+          <tr><td><code>git mv &lt;lama&gt; &lt;baru&gt;</code></td><td>Rename/pindahkan file dengan tetap tercatat di riwayat</td></tr>
+          <tr><td><code>git blame &lt;file&gt;</code></td><td>Lihat siapa mengubah tiap baris file, dan di commit mana</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="tautan">Tautan Resmi</h2>
+    <ul>
+      <li><a href="https://git-scm.com/doc" target="_blank" rel="noopener">git-scm.com/doc</a> — dokumentasi resmi Git</li>
+      <li><a href="https://docs.github.com" target="_blank" rel="noopener">docs.github.com</a> — dokumentasi resmi GitHub</li>
+      <li><a href="https://www.conventionalcommits.org" target="_blank" rel="noopener">conventionalcommits.org</a> — spesifikasi konvensi pesan commit</li>
+      <li><a href="https://docs.github.com/pages" target="_blank" rel="noopener">docs.github.com/pages</a> — dokumentasi GitHub Pages</li>
+    </ul>
+
+    <nav class="page-nav" aria-label="Navigasi modul">
+      <a class="prev" href="latihan.html">
+        <div class="dir">← Sebelumnya</div>
+        <div class="title">Latihan Praktek</div>
+      </a>
+      <a class="next" href="index.html">
+        <div class="dir">Kembali →</div>
+        <div class="title">Beranda</div>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<footer class="site-footer">
+  Dibuat untuk kebutuhan internal workshop Git &amp; GitHub · Materi statis (HTML/CSS/JS murni).
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

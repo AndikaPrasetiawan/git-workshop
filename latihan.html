@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latihan Praktek — Workshop Git &amp; GitHub</title>
+<meta name="description" content="Checklist latihan praktek langkah-demi-langkah untuk workshop Git & GitHub, progres tersimpan otomatis di browser.">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Lewati ke konten utama</a>
+
+<header class="topbar">
+  <button class="icon-btn menu-toggle" data-menu-toggle aria-label="Buka menu" aria-expanded="false">☰</button>
+  <a class="brand" href="index.html">
+    <span class="logo-mark">git</span>
+    <span>Workshop Git &amp; GitHub</span>
+  </a>
+  <div class="topbar-spacer"></div>
+  <a class="gh-link" href="https://github.com/" target="_blank" rel="noopener">
+    <span>⭐</span><span>Lihat di GitHub</span>
+  </a>
+  <button class="icon-btn" data-theme-toggle aria-label="Ganti tema">🌙</button>
+</header>
+
+<div class="sidebar-backdrop" data-sidebar-backdrop></div>
+
+<div class="layout">
+  <nav class="sidebar" aria-label="Navigasi modul">
+    <div class="side-group">
+      <div class="side-group-title">Mulai</div>
+      <a class="side-link" href="index.html"><span class="num">•</span> Beranda</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Presentasi</div>
+      <a class="side-link" href="slide.html" target="_blank" rel="noopener"><span class="num">▶</span> Slide Workshop</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Modul</div>
+      <a class="side-link" href="modul-01-pengenalan.html"><span class="num">1</span> Pengenalan Git &amp; VCS</a>
+      <a class="side-link" href="modul-02-instalasi.html"><span class="num">2</span> Instalasi &amp; Konfigurasi</a>
+      <a class="side-link" href="modul-03-dasar-git.html"><span class="num">3</span> Perintah Dasar Git</a>
+      <a class="side-link" href="modul-04-branching.html"><span class="num">4</span> Branching &amp; Merging</a>
+      <a class="side-link" href="modul-05-remote-github.html"><span class="num">5</span> Remote &amp; GitHub</a>
+      <a class="side-link" href="modul-06-kolaborasi.html"><span class="num">6</span> Kolaborasi &amp; Pull Request</a>
+      <a class="side-link" href="modul-07-best-practices.html"><span class="num">7</span> Best Practices</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Praktek</div>
+      <a class="side-link" href="latihan.html"><span class="num">✎</span> Latihan Praktek</a>
+      <a class="side-link" href="referensi.html"><span class="num">≡</span> Cheat Sheet</a>
+    </div>
+  </nav>
+
+  <main class="content" id="main">
+    <div class="page-header">
+      <div class="badge-row">
+        <span class="badge accent">Interaktif</span>
+        <span class="badge">6 sesi latihan</span>
+      </div>
+      <h1>Latihan Praktek</h1>
+      <p class="lead">
+        Checklist ini menuntun kalian praktek langsung, dari repo pertama sampai Pull Request pertama.
+        Centang setiap langkah setelah benar-benar dikerjakan di terminal — progres tersimpan otomatis
+        di browser ini.
+      </p>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-top">
+        <span>Progres Keseluruhan</span>
+        <span class="progress-percent">0% (0/0)</span>
+      </div>
+      <div class="progress-bar-track"><div class="progress-bar-fill"></div></div>
+      <div class="progress-reset"><button type="button" data-reset-progress>Reset semua progres</button></div>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-head">
+        <span class="num">1</span>
+        <div>
+          <h3>Setup Lingkungan</h3>
+          <p>Terkait Modul 1 &amp; 2 · pastikan Git terpasang dan dikenali</p>
+        </div>
+      </div>
+      <div class="exercise-body">
+        <div class="check-item">
+          <input type="checkbox" id="l1-1" data-progress-key="l1-1">
+          <label for="l1-1">Install Git dan verifikasi dengan <code>git --version</code></label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l1-2" data-progress-key="l1-2">
+          <label for="l1-2">Atur <code>git config --global user.name</code> dan <code>user.email</code></label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l1-3" data-progress-key="l1-3">
+          <label for="l1-3">Buat akun di <a href="https://github.com" target="_blank" rel="noopener">github.com</a> (jika belum punya)</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-head">
+        <span class="num">2</span>
+        <div>
+          <h3>Repository Lokal Pertama</h3>
+          <p>Terkait Modul 3 · siklus init → add → commit → log</p>
+        </div>
+      </div>
+      <div class="exercise-body">
+        <div class="check-item">
+          <input type="checkbox" id="l2-1" data-progress-key="l2-1">
+          <label for="l2-1">Buat folder baru, masuk ke dalamnya, lalu jalankan <code>git init</code></label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l2-2" data-progress-key="l2-2">
+          <label for="l2-2">Buat file <code>README.md</code> berisi judul proyek</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l2-3" data-progress-key="l2-3">
+          <label for="l2-3">Jalankan <code>git status</code>, amati file yang belum dilacak</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l2-4" data-progress-key="l2-4">
+          <label for="l2-4"><code>git add README.md</code>, lalu <code>git commit -m "docs: tambah README awal"</code></label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l2-5" data-progress-key="l2-5">
+          <label for="l2-5">Edit README, tambah 1 paragraf, lalu commit lagi dengan pesan berbeda</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l2-6" data-progress-key="l2-6">
+          <label for="l2-6">Jalankan <code>git log --oneline</code> — pastikan ada 2 commit</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-head">
+        <span class="num">3</span>
+        <div>
+          <h3>Branching &amp; Merge</h3>
+          <p>Terkait Modul 4 · bekerja di branch terpisah lalu menggabungkannya</p>
+        </div>
+      </div>
+      <div class="exercise-body">
+        <div class="check-item">
+          <input type="checkbox" id="l3-1" data-progress-key="l3-1">
+          <label for="l3-1">Buat branch baru: <code>git switch -c fitur/tambah-kontak</code></label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l3-2" data-progress-key="l3-2">
+          <label for="l3-2">Buat file baru (misalnya <code>kontak.md</code>), lalu commit di branch ini</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l3-3" data-progress-key="l3-3">
+          <label for="l3-3">Kembali ke branch utama: <code>git switch main</code></label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l3-4" data-progress-key="l3-4">
+          <label for="l3-4">Gabungkan: <code>git merge fitur/tambah-kontak</code></label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l3-5" data-progress-key="l3-5">
+          <label for="l3-5">Lihat hasilnya secara visual: <code>git log --oneline --graph --all</code></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-head">
+        <span class="num">4</span>
+        <div>
+          <h3>Menyambung ke GitHub</h3>
+          <p>Terkait Modul 5 · push repo lokal ke GitHub untuk pertama kali</p>
+        </div>
+      </div>
+      <div class="exercise-body">
+        <div class="check-item">
+          <input type="checkbox" id="l4-1" data-progress-key="l4-1">
+          <label for="l4-1">Setup SSH key dan tes dengan <code>ssh -T git@github.com</code></label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l4-2" data-progress-key="l4-2">
+          <label for="l4-2">Buat repository baru (kosong) di GitHub</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l4-3" data-progress-key="l4-3">
+          <label for="l4-3">Hubungkan repo lokal: <code>git remote add origin ...</code></label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l4-4" data-progress-key="l4-4">
+          <label for="l4-4">Push pertama: <code>git push -u origin main</code></label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l4-5" data-progress-key="l4-5">
+          <label for="l4-5">Refresh halaman repo di GitHub, pastikan file kalian muncul</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-head">
+        <span class="num">5</span>
+        <div>
+          <h3>Kolaborasi &amp; Pull Request</h3>
+          <p>Terkait Modul 6 · alur branch → push → Pull Request → merge</p>
+        </div>
+      </div>
+      <div class="exercise-body">
+        <div class="check-item">
+          <input type="checkbox" id="l5-1" data-progress-key="l5-1">
+          <label for="l5-1">Buat branch baru untuk perubahan kecil, misalnya <code>fitur/perbaiki-typo</code></label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l5-2" data-progress-key="l5-2">
+          <label for="l5-2">Push branch tersebut ke GitHub: <code>git push origin fitur/perbaiki-typo</code></label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l5-3" data-progress-key="l5-3">
+          <label for="l5-3">Buka GitHub, buat Pull Request dari branch tersebut ke <code>main</code></label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l5-4" data-progress-key="l5-4">
+          <label for="l5-4">Tambahkan 1 komentar review pada PR (boleh mereview PR sendiri atau punya teman)</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l5-5" data-progress-key="l5-5">
+          <label for="l5-5">Merge Pull Request tersebut lewat tombol di GitHub</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l5-6" data-progress-key="l5-6">
+          <label for="l5-6"><code>git pull</code> di lokal supaya branch <code>main</code> lokal ikut ter-update</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-head">
+        <span class="num">6</span>
+        <div>
+          <h3>Studi Kasus: Merge Conflict</h3>
+          <p>Terkait Modul 4 · sengaja membuat lalu menyelesaikan konflik</p>
+        </div>
+      </div>
+      <div class="exercise-body">
+        <div class="check-item">
+          <input type="checkbox" id="l6-1" data-progress-key="l6-1">
+          <label for="l6-1">Di branch <code>main</code>, ubah baris pertama README, commit</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l6-2" data-progress-key="l6-2">
+          <label for="l6-2">Buat branch baru dari commit <em>sebelum</em> perubahan itu, ubah baris yang sama dengan isi berbeda, commit</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l6-3" data-progress-key="l6-3">
+          <label for="l6-3">Coba <code>git merge</code> branch tersebut ke <code>main</code> — amati pesan conflict</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l6-4" data-progress-key="l6-4">
+          <label for="l6-4">Buka file yang konflik, hapus marker <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> / <code>=======</code> / <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>, putuskan versi final</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="l6-5" data-progress-key="l6-5">
+          <label for="l6-5"><code>git add</code> lalu <code>git commit</code> untuk menyelesaikan merge</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <span class="callout-icon">🎉</span>
+      <div>
+        <span class="callout-title">Semua selesai?</span>
+        <p>Kalau checklist di atas sudah 100%, kalian sudah menjalankan alur kerja Git yang sama seperti yang dipakai tim software profesional sehari-hari. Cek <a href="referensi.html">Cheat Sheet</a> untuk mengingat kembali perintah-perintah ini kapan pun dibutuhkan.</p>
+      </div>
+    </div>
+
+    <nav class="page-nav" aria-label="Navigasi modul">
+      <a class="prev" href="modul-07-best-practices.html">
+        <div class="dir">← Sebelumnya</div>
+        <div class="title">Modul 7: Best Practices</div>
+      </a>
+      <a class="next" href="referensi.html">
+        <div class="dir">Selanjutnya →</div>
+        <div class="title">Cheat Sheet</div>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<footer class="site-footer">
+  Dibuat untuk kebutuhan internal workshop Git &amp; GitHub · Materi statis (HTML/CSS/JS murni).
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

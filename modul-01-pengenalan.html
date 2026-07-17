@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modul 1: Pengenalan Git &amp; Version Control — Workshop Git &amp; GitHub</title>
+<meta name="description" content="Apa itu version control system, kenapa memakai Git, dan perbedaan mendasar antara Git dan GitHub.">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Lewati ke konten utama</a>
+
+<header class="topbar">
+  <button class="icon-btn menu-toggle" data-menu-toggle aria-label="Buka menu" aria-expanded="false">☰</button>
+  <a class="brand" href="index.html">
+    <span class="logo-mark">git</span>
+    <span>Workshop Git &amp; GitHub</span>
+  </a>
+  <div class="topbar-spacer"></div>
+  <a class="gh-link" href="https://github.com/" target="_blank" rel="noopener">
+    <span>⭐</span><span>Lihat di GitHub</span>
+  </a>
+  <button class="icon-btn" data-theme-toggle aria-label="Ganti tema">🌙</button>
+</header>
+
+<div class="sidebar-backdrop" data-sidebar-backdrop></div>
+
+<div class="layout">
+  <nav class="sidebar" aria-label="Navigasi modul">
+    <div class="side-group">
+      <div class="side-group-title">Mulai</div>
+      <a class="side-link" href="index.html"><span class="num">•</span> Beranda</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Presentasi</div>
+      <a class="side-link" href="slide.html" target="_blank" rel="noopener"><span class="num">▶</span> Slide Workshop</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Modul</div>
+      <a class="side-link" href="modul-01-pengenalan.html"><span class="num">1</span> Pengenalan Git &amp; VCS</a>
+      <a class="side-link" href="modul-02-instalasi.html"><span class="num">2</span> Instalasi &amp; Konfigurasi</a>
+      <a class="side-link" href="modul-03-dasar-git.html"><span class="num">3</span> Perintah Dasar Git</a>
+      <a class="side-link" href="modul-04-branching.html"><span class="num">4</span> Branching &amp; Merging</a>
+      <a class="side-link" href="modul-05-remote-github.html"><span class="num">5</span> Remote &amp; GitHub</a>
+      <a class="side-link" href="modul-06-kolaborasi.html"><span class="num">6</span> Kolaborasi &amp; Pull Request</a>
+      <a class="side-link" href="modul-07-best-practices.html"><span class="num">7</span> Best Practices</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Praktek</div>
+      <a class="side-link" href="latihan.html"><span class="num">✎</span> Latihan Praktek</a>
+      <a class="side-link" href="referensi.html"><span class="num">≡</span> Cheat Sheet</a>
+    </div>
+  </nav>
+
+  <main class="content" id="main">
+    <div class="page-header">
+      <div class="badge-row">
+        <span class="badge accent">Modul 1 / 7</span>
+        <span class="badge">± 15 menit</span>
+      </div>
+      <h1>Pengenalan Git &amp; Version Control</h1>
+      <p class="lead">Sebelum mengetik satu perintah pun, penting untuk paham masalah apa yang sebenarnya diselesaikan oleh Git.</p>
+    </div>
+
+    <div class="toc">
+      <div class="toc-title">Di modul ini</div>
+      <ol>
+        <li><a href="#vcs">Apa itu Version Control System</a></li>
+        <li><a href="#kenapa-git">Kenapa memakai Git</a></li>
+        <li><a href="#git-vs-github">Git vs GitHub</a></li>
+        <li><a href="#konsep">Konsep dasar &amp; alur kerja</a></li>
+      </ol>
+    </div>
+
+    <h2 id="vcs">Apa itu Version Control System (VCS)?</h2>
+    <p>
+      Bayangkan kalian sedang menulis kode dan menyimpan file dengan nama
+      <code>tugas_final.js</code>, <code>tugas_final_v2.js</code>, <code>tugas_final_v2_FIX.js</code>,
+      <code>tugas_final_v2_FIX_beneran.js</code>. Ini adalah cara manual (dan menyakitkan) untuk melacak
+      perubahan. <strong>Version Control System</strong> menggantikan kekacauan itu dengan sistem yang mencatat
+      setiap perubahan pada kode secara terstruktur — siapa yang mengubah, kapan, dan apa isi perubahannya.
+    </p>
+    <p>Dengan VCS kalian bisa:</p>
+    <ul>
+      <li>Melihat riwayat lengkap perubahan sebuah file, kapan pun.</li>
+      <li>Kembali ke versi sebelumnya kalau ada yang rusak.</li>
+      <li>Bekerja paralel dengan banyak orang tanpa saling menimpa pekerjaan.</li>
+      <li>Tahu persis siapa mengubah baris kode mana, dan kenapa.</li>
+    </ul>
+
+    <p>Version control sendiri berkembang dalam tiga generasi:</p>
+    <ul>
+      <li><strong>Local VCS</strong> — riwayat cuma tersimpan di satu komputer, tidak bisa dipakai kolaborasi sama sekali.</li>
+      <li><strong>Centralized VCS</strong> (contoh: SVN) — satu server pusat menyimpan seluruh riwayat, semua orang terhubung ke situ. Risikonya: kalau server itu down atau rusak, semua orang kena dampaknya sekaligus.</li>
+      <li><strong>Distributed VCS</strong> (contoh: Git) — setiap komputer punya salinan riwayat yang <em>lengkap</em>, bukan cuma satu server yang punya.</li>
+    </ul>
+
+    <div class="callout info">
+      <span class="callout-icon">📌</span>
+      <div>
+        <span class="callout-title">Git itu terdistribusi</span>
+        <p>
+          Centralized itu seperti satu buku catatan yang dipegang bendahara kelas — kalau bukunya hilang,
+          semua data kelas ikut hilang. Distributed itu seperti semua anggota kelas punya fotokopi lengkap
+          dari buku itu. Karena terdistribusi, kalian tetap bisa commit, lihat log, dan membuat branch
+          meski sedang tanpa internet.
+        </p>
+      </div>
+    </div>
+
+    <h2 id="kenapa-git">Kenapa Memakai Git?</h2>
+    <p>
+      Git dibuat tahun 2005 oleh <strong>Linus Torvalds</strong> (pencipta Linux), karena tim kernel Linux
+      kehilangan akses ke tool berbayar yang biasa mereka pakai untuk mengelola kontribusi dari ribuan
+      developer di seluruh dunia. Linus butuh solusi cepat, dan dalam hitungan hari, Git pun lahir. Sejak
+      itu, <strong>Junio Hamano</strong> melanjutkan proyek ini sebagai maintainer utama sampai sekarang.
+    </p>
+    <div class="callout tip">
+      <span class="callout-icon">🙂</span>
+      <div>
+        <span class="callout-title">Kenapa namanya "Git"?</span>
+        <p>
+          Linus sendiri pernah bercanda bahwa ia selalu menamai proyeknya sesuai dirinya sendiri —
+          dan "git" adalah slang Inggris untuk "orang yang menyebalkan". Analogi yang lebih membantu:
+          Git itu seperti kamera. Setiap kali kalian <code>commit</code>, Git sedang "memotret" kondisi
+          seluruh proyek kalian saat itu juga, dan foto itu tersimpan selamanya.
+        </p>
+      </div>
+    </div>
+    <p>Sampai sekarang Git menjadi standar industri karena:</p>
+    <ul>
+      <li><strong>Cepat</strong> — sebagian besar operasi berjalan lokal di komputer kalian.</li>
+      <li><strong>Aman</strong> — setiap perubahan diberi checksum (SHA-1/SHA-256), riwayat sulit dimanipulasi diam-diam.</li>
+      <li><strong>Mendukung kerja paralel</strong> — lewat branching yang ringan dan cepat.</li>
+      <li><strong>Bisa dipakai offline</strong> — commit, lihat riwayat, dan membuat branch tanpa internet.</li>
+      <li><strong>Gratis &amp; open source</strong>, dipakai hampir semua perusahaan software di dunia.</li>
+    </ul>
+
+    <h2 id="git-vs-github">Git vs GitHub: Bukan Hal yang Sama</h2>
+    <p>Ini kebingungan paling umum untuk pemula, jadi penting untuk clear sejak awal:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Git</th><th>GitHub</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Perangkat lunak (software) version control</td>
+            <td>Platform/layanan hosting untuk repository Git</td>
+          </tr>
+          <tr>
+            <td>Berjalan di komputer kalian, lewat command line</td>
+            <td>Berjalan di server, diakses lewat browser/API</td>
+          </tr>
+          <tr>
+            <td>Dibuat oleh Linus Torvalds, open source</td>
+            <td>Dimiliki oleh Microsoft, layanan komersial (ada versi gratis)</td>
+          </tr>
+          <tr>
+            <td>Alternatif: tidak ada pengganti langsung, ini standarnya</td>
+            <td>Kompetitor: GitLab, Bitbucket, Gitea</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Analogi sederhana: <strong>Git</strong> itu seperti Microsoft Word — aplikasi untuk membuat dan menyimpan
+      dokumen (kode) beserta riwayat perubahannya. <strong>GitHub</strong> itu seperti Google Drive — tempat
+      menyimpan dokumen itu di cloud supaya bisa diakses dan dikerjakan bersama orang lain. Kalian bisa
+      pakai Git tanpa GitHub, tapi tidak bisa pakai GitHub tanpa Git.
+    </p>
+
+    <h3>GitHub Bukan Satu-satunya</h3>
+    <p>GitHub punya beberapa "saudara" yang juga populer, tergantung kebutuhan tim:</p>
+    <ul>
+      <li><strong>GitLab</strong> — populer untuk DevOps &amp; CI/CD yang terintegrasi.</li>
+      <li><strong>Bitbucket</strong> — sering dipakai tim yang sudah pakai produk Atlassian (Jira, Trello).</li>
+      <li><strong>Azure DevOps</strong> — umum di ekosistem perusahaan berbasis Microsoft.</li>
+      <li><strong>Gitea</strong> &amp; <strong>Forgejo</strong> — ringan, open source, cocok di-hosting sendiri.</li>
+    </ul>
+    <p>Workshop ini memakai GitHub karena paling populer untuk belajar dan kolaborasi open source — paling banyak tutorial, komunitas, dan lowongan kerja yang menyebutnya.</p>
+
+    <h2 id="konsep">Konsep Dasar &amp; Alur Kerja</h2>
+    <p>Ada beberapa istilah yang akan terus muncul sepanjang workshop ini:</p>
+    <ul>
+      <li><strong>Repository (repo)</strong> — folder proyek yang riwayat perubahannya dilacak oleh Git.</li>
+      <li><strong>Commit</strong> — "snapshot" atau titik simpan dari kondisi proyek pada waktu tertentu, lengkap dengan pesan penjelas.</li>
+      <li><strong>Working Directory</strong> — folder proyek yang sedang kalian edit sehari-hari.</li>
+      <li><strong>Staging Area (Index)</strong> — area "ruang tunggu" untuk memilih perubahan mana yang akan disertakan pada commit berikutnya.</li>
+      <li><strong>HEAD</strong> — penunjuk ke commit/branch yang sedang aktif saat ini.</li>
+    </ul>
+
+    <p>Alur kerja dasarnya seperti ini:</p>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-label">alur kerja git</span>
+      </div>
+      <pre><code>Working Directory  --git add-->  Staging Area  --git commit-->  Repository (lokal)  --git push-->  GitHub (remote)
+   (file diedit)      (dipilih)      (siap disimpan)      (tersimpan permanen)      (dibagikan ke tim)</code></pre>
+    </div>
+
+    <p>
+      Jangan khawatir kalau istilah-istilah ini belum terasa nyambung — di Modul 3 kita akan langsung
+      praktik satu per satu sampai alurnya terasa natural.
+    </p>
+
+    <div class="callout tip">
+      <span class="callout-icon">✅</span>
+      <div>
+        <span class="callout-title">Poin penting modul ini</span>
+        <p>Git = alat version control di komputer kalian. GitHub = tempat hosting repo Git di internet supaya bisa berkolaborasi. Keduanya saling melengkapi, bukan pengganti satu sama lain.</p>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <span class="callout-icon">🎞</span>
+      <div>
+        <span class="callout-title">Versi ringkas modul ini</span>
+        <p>Materi di atas juga dibawakan langsung dalam bentuk cerita &amp; analogi di <a href="slide.html" target="_blank" rel="noopener">Slide Presentasi</a> — cocok untuk mengingat kembali intinya secara cepat.</p>
+      </div>
+    </div>
+
+    <nav class="page-nav" aria-label="Navigasi modul">
+      <a class="prev" href="index.html">
+        <div class="dir">← Sebelumnya</div>
+        <div class="title">Beranda</div>
+      </a>
+      <a class="next" href="modul-02-instalasi.html">
+        <div class="dir">Selanjutnya →</div>
+        <div class="title">Modul 2: Instalasi &amp; Konfigurasi</div>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<footer class="site-footer">
+  Dibuat untuk kebutuhan internal workshop Git &amp; GitHub · Materi statis (HTML/CSS/JS murni).
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

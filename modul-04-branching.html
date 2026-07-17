@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modul 4: Branching &amp; Merging — Workshop Git &amp; GitHub</title>
+<meta name="description" content="Bekerja paralel dengan branch: membuat, berpindah, menggabungkan, dan menyelesaikan merge conflict.">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Lewati ke konten utama</a>
+
+<header class="topbar">
+  <button class="icon-btn menu-toggle" data-menu-toggle aria-label="Buka menu" aria-expanded="false">☰</button>
+  <a class="brand" href="index.html">
+    <span class="logo-mark">git</span>
+    <span>Workshop Git &amp; GitHub</span>
+  </a>
+  <div class="topbar-spacer"></div>
+  <a class="gh-link" href="https://github.com/" target="_blank" rel="noopener">
+    <span>⭐</span><span>Lihat di GitHub</span>
+  </a>
+  <button class="icon-btn" data-theme-toggle aria-label="Ganti tema">🌙</button>
+</header>
+
+<div class="sidebar-backdrop" data-sidebar-backdrop></div>
+
+<div class="layout">
+  <nav class="sidebar" aria-label="Navigasi modul">
+    <div class="side-group">
+      <div class="side-group-title">Mulai</div>
+      <a class="side-link" href="index.html"><span class="num">•</span> Beranda</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Presentasi</div>
+      <a class="side-link" href="slide.html" target="_blank" rel="noopener"><span class="num">▶</span> Slide Workshop</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Modul</div>
+      <a class="side-link" href="modul-01-pengenalan.html"><span class="num">1</span> Pengenalan Git &amp; VCS</a>
+      <a class="side-link" href="modul-02-instalasi.html"><span class="num">2</span> Instalasi &amp; Konfigurasi</a>
+      <a class="side-link" href="modul-03-dasar-git.html"><span class="num">3</span> Perintah Dasar Git</a>
+      <a class="side-link" href="modul-04-branching.html"><span class="num">4</span> Branching &amp; Merging</a>
+      <a class="side-link" href="modul-05-remote-github.html"><span class="num">5</span> Remote &amp; GitHub</a>
+      <a class="side-link" href="modul-06-kolaborasi.html"><span class="num">6</span> Kolaborasi &amp; Pull Request</a>
+      <a class="side-link" href="modul-07-best-practices.html"><span class="num">7</span> Best Practices</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Praktek</div>
+      <a class="side-link" href="latihan.html"><span class="num">✎</span> Latihan Praktek</a>
+      <a class="side-link" href="referensi.html"><span class="num">≡</span> Cheat Sheet</a>
+    </div>
+  </nav>
+
+  <main class="content" id="main">
+    <div class="page-header">
+      <div class="badge-row">
+        <span class="badge accent">Modul 4 / 7</span>
+        <span class="badge">± 30 menit</span>
+      </div>
+      <h1>Branching &amp; Merging</h1>
+      <p class="lead">Branch memungkinkan kalian bereksperimen atau mengerjakan fitur tanpa mengganggu kode utama yang sudah stabil.</p>
+    </div>
+
+    <div class="toc">
+      <div class="toc-title">Di modul ini</div>
+      <ol>
+        <li><a href="#konsep-branch">Apa itu branch</a></li>
+        <li><a href="#kelola-branch">Membuat &amp; berpindah branch</a></li>
+        <li><a href="#merge">Menggabungkan branch (merge)</a></li>
+        <li><a href="#conflict">Menyelesaikan merge conflict</a></li>
+      </ol>
+    </div>
+
+    <h2 id="konsep-branch">Apa itu Branch?</h2>
+    <p>
+      Secara teknis, branch hanyalah <strong>pointer bergerak</strong> yang menunjuk ke commit tertentu.
+      Karena hanya pointer (bukan salinan seluruh file), membuat branch di Git sangat ringan dan instan
+      — beda dengan sistem lama yang harus menyalin seluruh proyek.
+    </p>
+    <p>Kenapa pakai branch?</p>
+    <ul>
+      <li>Mengerjakan fitur baru tanpa merusak branch <code>main</code> yang stabil.</li>
+      <li>Beberapa orang bisa mengerjakan fitur berbeda secara bersamaan.</li>
+      <li>Bisa membuang eksperimen yang gagal tanpa efek samping — cukup hapus branch-nya.</li>
+    </ul>
+
+    <div class="code-block">
+      <div class="code-block-head"><span class="code-block-label">ilustrasi</span></div>
+      <pre><code>main:     A---B---C---F---G
+                \         /
+feature:         D-------E</code></pre>
+    </div>
+    <p>Branch <code>feature</code> dibuat dari commit B, berkembang lewat commit D dan E, lalu digabung kembali ke <code>main</code> pada commit G.</p>
+
+    <h2 id="kelola-branch">Membuat &amp; Berpindah Branch</h2>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-label">bash</span>
+        <button class="copy-btn">Salin</button>
+      </div>
+      <pre><code>git branch                       # lihat daftar branch, tanda * = branch aktif
+git branch nama-fitur             # buat branch baru (tanpa berpindah)
+git switch nama-fitur             # berpindah ke branch tersebut
+git switch -c nama-fitur          # buat sekaligus berpindah (cara modern)
+git branch -d nama-fitur          # hapus branch yang sudah selesai di-merge</code></pre>
+    </div>
+
+    <div class="callout info">
+      <span class="callout-icon">📌</span>
+      <div>
+        <span class="callout-title">git switch vs git checkout</span>
+        <p><code>git checkout -b nama-fitur</code> adalah cara lama untuk membuat+berpindah branch, dan masih banyak dipakai. <code>git switch -c</code> adalah perintah modern (Git 2.23+) yang lebih fokus dan tidak ambigu, karena <code>checkout</code> dulunya juga dipakai untuk hal lain (mengembalikan file). Keduanya valid — pakai yang paling nyaman.</p>
+      </div>
+    </div>
+
+    <h2 id="merge">Menggabungkan Branch (Merge)</h2>
+    <p>Setelah fitur di branch selesai dan diuji, gabungkan kembali ke <code>main</code>:</p>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-label">bash</span>
+        <button class="copy-btn">Salin</button>
+      </div>
+      <pre><code>git switch main            # pindah ke branch tujuan
+git merge nama-fitur       # gabungkan branch fitur ke main</code></pre>
+    </div>
+
+    <p>Ada dua jenis merge:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Jenis</th><th>Kapan terjadi</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Fast-forward</strong></td>
+            <td>Branch <code>main</code> tidak punya commit baru sejak branch fitur dibuat — Git cukup menggeser pointer <code>main</code> ke depan, tanpa commit merge baru.</td>
+          </tr>
+          <tr>
+            <td><strong>3-way merge</strong></td>
+            <td>Kedua branch sama-sama punya commit baru — Git membuat "merge commit" baru yang menggabungkan riwayat keduanya.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="conflict">Menyelesaikan Merge Conflict</h2>
+    <p>
+      Conflict terjadi ketika dua branch mengubah <strong>baris yang sama</strong> pada file yang sama, dan
+      Git tidak bisa memutuskan sendiri versi mana yang benar. Ini normal dan bukan tanda kesalahan —
+      justru bagian penting dari kerja tim yang perlu kalian kuasai.
+    </p>
+    <p>Saat conflict terjadi, <code>git status</code> akan menandai file bermasalah, dan isi filenya akan terlihat seperti ini:</p>
+    <div class="code-block">
+      <div class="code-block-head"><span class="code-block-label">contoh isi file saat conflict</span></div>
+      <pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+&lt;h1&gt;Selamat Datang di Toko Kami&lt;/h1&gt;
+=======
+&lt;h1&gt;Selamat Datang di Toko Online&lt;/h1&gt;
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; nama-fitur</code></pre>
+    </div>
+    <p>Langkah menyelesaikannya:</p>
+    <ol>
+      <li>Buka file yang konflik di editor.</li>
+      <li>Putuskan versi mana yang dipakai (atau gabungkan keduanya), lalu <strong>hapus semua marker</strong> <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>.</li>
+      <li>Simpan file, lalu stage dan commit seperti biasa:</li>
+    </ol>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-label">bash</span>
+        <button class="copy-btn">Salin</button>
+      </div>
+      <pre><code>git add nama-file-yang-konflik
+git commit -m "Selesaikan konflik merge nama-fitur ke main"</code></pre>
+    </div>
+
+    <div class="callout warning">
+      <span class="callout-icon">⚠️</span>
+      <div>
+        <span class="callout-title">Kalau ragu, batalkan dulu</span>
+        <p>Sedang di tengah merge dan bingung? Jalankan <code>git merge --abort</code> untuk membatalkan dan kembali ke kondisi sebelum merge dimulai. Lebih aman daripada asal commit.</p>
+      </div>
+    </div>
+
+    <h2 id="visualisasi">Memvisualisasikan Branch</h2>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-label">bash</span>
+        <button class="copy-btn">Salin</button>
+      </div>
+      <pre><code>git log --oneline --graph --all</code></pre>
+    </div>
+    <p>Jalankan ini kapan pun kalian bingung dengan kondisi branch saat ini — sangat membantu membangun intuisi visual tentang apa yang sedang terjadi.</p>
+
+    <div class="callout tip">
+      <span class="callout-icon">✅</span>
+      <div>
+        <span class="callout-title">Saatnya praktek</span>
+        <p>Coba <a href="latihan.html">Latihan 3</a> untuk praktek branching, dan <a href="latihan.html">Latihan 6</a> untuk sengaja membuat lalu menyelesaikan merge conflict — pengalaman ini jauh lebih efektif daripada sekadar membaca.</p>
+      </div>
+    </div>
+
+    <nav class="page-nav" aria-label="Navigasi modul">
+      <a class="prev" href="modul-03-dasar-git.html">
+        <div class="dir">← Sebelumnya</div>
+        <div class="title">Modul 3: Perintah Dasar Git</div>
+      </a>
+      <a class="next" href="modul-05-remote-github.html">
+        <div class="dir">Selanjutnya →</div>
+        <div class="title">Modul 5: Remote &amp; GitHub</div>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<footer class="site-footer">
+  Dibuat untuk kebutuhan internal workshop Git &amp; GitHub · Materi statis (HTML/CSS/JS murni).
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

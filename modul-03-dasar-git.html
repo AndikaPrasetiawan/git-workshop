@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modul 3: Perintah Dasar Git — Workshop Git &amp; GitHub</title>
+<meta name="description" content="git init, add, commit, status, log, dan diff — siklus kerja harian dengan Git.">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Lewati ke konten utama</a>
+
+<header class="topbar">
+  <button class="icon-btn menu-toggle" data-menu-toggle aria-label="Buka menu" aria-expanded="false">☰</button>
+  <a class="brand" href="index.html">
+    <span class="logo-mark">git</span>
+    <span>Workshop Git &amp; GitHub</span>
+  </a>
+  <div class="topbar-spacer"></div>
+  <a class="gh-link" href="https://github.com/" target="_blank" rel="noopener">
+    <span>⭐</span><span>Lihat di GitHub</span>
+  </a>
+  <button class="icon-btn" data-theme-toggle aria-label="Ganti tema">🌙</button>
+</header>
+
+<div class="sidebar-backdrop" data-sidebar-backdrop></div>
+
+<div class="layout">
+  <nav class="sidebar" aria-label="Navigasi modul">
+    <div class="side-group">
+      <div class="side-group-title">Mulai</div>
+      <a class="side-link" href="index.html"><span class="num">•</span> Beranda</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Presentasi</div>
+      <a class="side-link" href="slide.html" target="_blank" rel="noopener"><span class="num">▶</span> Slide Workshop</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Modul</div>
+      <a class="side-link" href="modul-01-pengenalan.html"><span class="num">1</span> Pengenalan Git &amp; VCS</a>
+      <a class="side-link" href="modul-02-instalasi.html"><span class="num">2</span> Instalasi &amp; Konfigurasi</a>
+      <a class="side-link" href="modul-03-dasar-git.html"><span class="num">3</span> Perintah Dasar Git</a>
+      <a class="side-link" href="modul-04-branching.html"><span class="num">4</span> Branching &amp; Merging</a>
+      <a class="side-link" href="modul-05-remote-github.html"><span class="num">5</span> Remote &amp; GitHub</a>
+      <a class="side-link" href="modul-06-kolaborasi.html"><span class="num">6</span> Kolaborasi &amp; Pull Request</a>
+      <a class="side-link" href="modul-07-best-practices.html"><span class="num">7</span> Best Practices</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Praktek</div>
+      <a class="side-link" href="latihan.html"><span class="num">✎</span> Latihan Praktek</a>
+      <a class="side-link" href="referensi.html"><span class="num">≡</span> Cheat Sheet</a>
+    </div>
+  </nav>
+
+  <main class="content" id="main">
+    <div class="page-header">
+      <div class="badge-row">
+        <span class="badge accent">Modul 3 / 7</span>
+        <span class="badge">± 30 menit</span>
+      </div>
+      <h1>Perintah Dasar Git</h1>
+      <p class="lead">Ini modul inti — siklus <code>init → add → commit → log</code> yang akan kalian ulangi ratusan kali dalam karier ngoding.</p>
+    </div>
+
+    <div class="toc">
+      <div class="toc-title">Di modul ini</div>
+      <ol>
+        <li><a href="#init">git init</a></li>
+        <li><a href="#status">git status</a></li>
+        <li><a href="#add">git add</a></li>
+        <li><a href="#commit">git commit</a></li>
+        <li><a href="#log">git log</a></li>
+        <li><a href="#diff">git diff &amp; git show</a></li>
+        <li><a href="#gitignore">Mengenal .gitignore</a></li>
+      </ol>
+    </div>
+
+    <h2 id="init">1. git init — Memulai Repository</h2>
+    <p>Perintah ini mengubah folder biasa menjadi repository Git, dengan membuat folder tersembunyi <code>.git</code> yang menyimpan seluruh riwayat.</p>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-label">bash</span>
+        <button class="copy-btn">Salin</button>
+      </div>
+      <pre><code>mkdir proyek-latihan
+cd proyek-latihan
+git init</code></pre>
+    </div>
+    <div class="callout warning">
+      <span class="callout-icon">⚠️</span>
+      <div>
+        <span class="callout-title">Jangan double-init</span>
+        <p>Jalankan <code>git init</code> hanya sekali per proyek, di folder paling atas (root). Jangan jalankan di dalam folder yang sudah ada di dalam repo lain.</p>
+      </div>
+    </div>
+
+    <h2 id="status">2. git status — Cek Kondisi Terkini</h2>
+    <p>Perintah paling sering dipakai. Menampilkan file mana yang berubah, mana yang sudah di-stage, dan mana yang belum dilacak sama sekali.</p>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-label">bash</span>
+        <button class="copy-btn">Salin</button>
+      </div>
+      <pre><code>git status</code></pre>
+    </div>
+    <p>Biasakan menjalankan <code>git status</code> sebelum dan sesudah hampir setiap perintah lain — ini "kompas" kalian selama belajar Git.</p>
+
+    <div class="callout info">
+      <span class="callout-icon">📌</span>
+      <div>
+        <span class="callout-title">Tiga status setiap file di Git</span>
+        <p>
+          <strong>Modified</strong> — file sudah diubah, tapi belum ditandai untuk disimpan.
+          <strong>Staged</strong> — sudah ditandai lewat <code>git add</code>, siap masuk ke riwayat permanen.
+          <strong>Committed</strong> — sudah resmi tersimpan lewat <code>git commit</code>. Analoginya:
+          Modified itu barang belanjaan yang masih di rak, Staged itu sudah masuk keranjang, dan
+          Committed itu sudah dibayar di kasir — resmi jadi milik kalian, tercatat di struk.
+        </p>
+      </div>
+    </div>
+
+    <h2 id="add">3. git add — Staging Perubahan</h2>
+    <p>Memindahkan perubahan dari working directory ke staging area — memilih apa saja yang akan masuk ke commit berikutnya.</p>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-label">bash</span>
+        <button class="copy-btn">Salin</button>
+      </div>
+      <pre><code>git add nama-file.txt      # stage satu file
+git add folder/            # stage seluruh isi folder
+git add .                  # stage semua perubahan di direktori saat ini
+git add -p                 # stage sebagian (per potongan/hunk) dari sebuah file</code></pre>
+    </div>
+
+    <h2 id="commit">4. git commit — Menyimpan Snapshot</h2>
+    <p>Mengunci perubahan yang sudah di-stage menjadi satu titik riwayat permanen, lengkap dengan pesan penjelas.</p>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-label">bash</span>
+        <button class="copy-btn">Salin</button>
+      </div>
+      <pre><code>git commit -m "Tambah halaman kontak"
+
+# shortcut: stage semua file yang sudah dilacak + commit sekaligus
+git commit -am "Perbaiki bug validasi form"</code></pre>
+    </div>
+    <div class="callout tip">
+      <span class="callout-icon">💡</span>
+      <div>
+        <span class="callout-title">Pesan commit yang baik</span>
+        <p>Tulis dalam kalimat perintah, jelas, dan spesifik: <code>"Tambah validasi email di form pendaftaran"</code> jauh lebih berguna daripada <code>"update"</code> atau <code>"fix bug"</code>. Detail konvensi ada di <a href="modul-07-best-practices.html">Modul 7</a>.</p>
+      </div>
+    </div>
+
+    <h2 id="log">5. git log — Melihat Riwayat</h2>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-label">bash</span>
+        <button class="copy-btn">Salin</button>
+      </div>
+      <pre><code>git log                          # riwayat lengkap
+git log --oneline                # ringkas, satu baris per commit
+git log --oneline --graph --all  # + visualisasi branch dalam bentuk grafik</code></pre>
+    </div>
+    <p>Setiap commit punya ID unik (hash) seperti <code>a1b2c3d</code> — ini yang dipakai untuk merujuk commit tertentu di perintah-perintah lain.</p>
+
+    <h2 id="diff">6. git diff &amp; git show — Melihat Perubahan</h2>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-label">bash</span>
+        <button class="copy-btn">Salin</button>
+      </div>
+      <pre><code>git diff              # perubahan yang belum di-stage
+git diff --staged     # perubahan yang sudah di-stage, belum di-commit
+git show a1b2c3d       # detail lengkap satu commit tertentu</code></pre>
+    </div>
+
+    <h2 id="gitignore">7. Mengenal .gitignore</h2>
+    <p>
+      Tidak semua file perlu dilacak Git — misalnya file dependency (<code>node_modules/</code>), file environment
+      berisi kredensial (<code>.env</code>), atau file sistem (<code>.DS_Store</code>). Buat file bernama
+      <code>.gitignore</code> di root proyek:
+    </p>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-label">.gitignore</span>
+        <button class="copy-btn">Salin</button>
+      </div>
+      <pre><code>node_modules/
+.env
+.DS_Store
+*.log</code></pre>
+    </div>
+    <p>Pembahasan lebih lengkap ada di <a href="modul-07-best-practices.html">Modul 7</a>.</p>
+
+    <h2 id="rangkuman">Rangkuman Siklus Harian</h2>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-label">bash — siklus kerja harian</span>
+        <button class="copy-btn">Salin</button>
+      </div>
+      <pre><code>git status              # 1. cek apa yang berubah
+git add .               # 2. pilih perubahan yang mau disimpan
+git status              # 3. konfirmasi ulang (kebiasaan baik)
+git commit -m "pesan"   # 4. simpan sebagai snapshot
+git log --oneline       # 5. lihat riwayatnya</code></pre>
+    </div>
+
+    <div class="callout tip">
+      <span class="callout-icon">✅</span>
+      <div>
+        <span class="callout-title">Saatnya praktek</span>
+        <p>Ini modul paling penting untuk dipraktekkan langsung. Buka <a href="latihan.html">Latihan 1 &amp; 2</a> dan ikuti checklist-nya sebelum lanjut ke Modul 4.</p>
+      </div>
+    </div>
+
+    <nav class="page-nav" aria-label="Navigasi modul">
+      <a class="prev" href="modul-02-instalasi.html">
+        <div class="dir">← Sebelumnya</div>
+        <div class="title">Modul 2: Instalasi &amp; Konfigurasi</div>
+      </a>
+      <a class="next" href="modul-04-branching.html">
+        <div class="dir">Selanjutnya →</div>
+        <div class="title">Modul 4: Branching &amp; Merging</div>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<footer class="site-footer">
+  Dibuat untuk kebutuhan internal workshop Git &amp; GitHub · Materi statis (HTML/CSS/JS murni).
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

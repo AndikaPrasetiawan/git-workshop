@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modul 6: Kolaborasi &amp; Pull Request — Workshop Git &amp; GitHub</title>
+<meta name="description" content="Fork, branch fitur, Pull Request, code review, dan GitHub Issues — cara tim profesional berkolaborasi.">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Lewati ke konten utama</a>
+
+<header class="topbar">
+  <button class="icon-btn menu-toggle" data-menu-toggle aria-label="Buka menu" aria-expanded="false">☰</button>
+  <a class="brand" href="index.html">
+    <span class="logo-mark">git</span>
+    <span>Workshop Git &amp; GitHub</span>
+  </a>
+  <div class="topbar-spacer"></div>
+  <a class="gh-link" href="https://github.com/" target="_blank" rel="noopener">
+    <span>⭐</span><span>Lihat di GitHub</span>
+  </a>
+  <button class="icon-btn" data-theme-toggle aria-label="Ganti tema">🌙</button>
+</header>
+
+<div class="sidebar-backdrop" data-sidebar-backdrop></div>
+
+<div class="layout">
+  <nav class="sidebar" aria-label="Navigasi modul">
+    <div class="side-group">
+      <div class="side-group-title">Mulai</div>
+      <a class="side-link" href="index.html"><span class="num">•</span> Beranda</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Presentasi</div>
+      <a class="side-link" href="slide.html" target="_blank" rel="noopener"><span class="num">▶</span> Slide Workshop</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Modul</div>
+      <a class="side-link" href="modul-01-pengenalan.html"><span class="num">1</span> Pengenalan Git &amp; VCS</a>
+      <a class="side-link" href="modul-02-instalasi.html"><span class="num">2</span> Instalasi &amp; Konfigurasi</a>
+      <a class="side-link" href="modul-03-dasar-git.html"><span class="num">3</span> Perintah Dasar Git</a>
+      <a class="side-link" href="modul-04-branching.html"><span class="num">4</span> Branching &amp; Merging</a>
+      <a class="side-link" href="modul-05-remote-github.html"><span class="num">5</span> Remote &amp; GitHub</a>
+      <a class="side-link" href="modul-06-kolaborasi.html"><span class="num">6</span> Kolaborasi &amp; Pull Request</a>
+      <a class="side-link" href="modul-07-best-practices.html"><span class="num">7</span> Best Practices</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Praktek</div>
+      <a class="side-link" href="latihan.html"><span class="num">✎</span> Latihan Praktek</a>
+      <a class="side-link" href="referensi.html"><span class="num">≡</span> Cheat Sheet</a>
+    </div>
+  </nav>
+
+  <main class="content" id="main">
+    <div class="page-header">
+      <div class="badge-row">
+        <span class="badge accent">Modul 6 / 7</span>
+        <span class="badge">± 30 menit</span>
+      </div>
+      <h1>Kolaborasi &amp; Pull Request</h1>
+      <p class="lead">Ini yang membedakan Git solo dengan Git tim: alur fork → branch → Pull Request → review → merge.</p>
+    </div>
+
+    <div class="toc">
+      <div class="toc-title">Di modul ini</div>
+      <ol>
+        <li><a href="#fork-vs-clone">Fork vs Clone</a></li>
+        <li><a href="#alur">Alur kolaborasi standar</a></li>
+        <li><a href="#membuat-pr">Membuat Pull Request</a></li>
+        <li><a href="#review">Code review</a></li>
+        <li><a href="#issues">GitHub Issues</a></li>
+      </ol>
+    </div>
+
+    <h2 id="fork-vs-clone">Fork vs Clone</h2>
+    <p>Keduanya sama-sama menyalin repo, tapi tujuannya berbeda:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th>Clone</th><th>Fork</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Apa yang terjadi</strong></td>
+            <td>Mengunduh repo ke komputer lokal</td>
+            <td>Membuat salinan penuh repo ke akun GitHub kalian sendiri</td>
+          </tr>
+          <tr>
+            <td><strong>Kapan dipakai</strong></td>
+            <td>Kalian punya akses tulis (write access) langsung ke repo, misalnya repo tim internal</td>
+            <td>Kalian <em>tidak</em> punya akses tulis, misalnya berkontribusi ke proyek open source orang lain</td>
+          </tr>
+          <tr>
+            <td><strong>Alur</strong></td>
+            <td>clone → branch → push → Pull Request (di repo yang sama)</td>
+            <td>fork → clone hasil fork → branch → push → Pull Request (ke repo asli)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="alur">Alur Kolaborasi Standar (GitHub Flow)</h2>
+    <p>Pola ini dipakai hampir semua tim, baik untuk repo tim internal maupun kontribusi open source:</p>
+    <div class="code-block">
+      <div class="code-block-head"><span class="code-block-label">alur kerja</span></div>
+      <pre><code>1. (fork jika perlu) → clone repo ke lokal
+2. git switch -c fitur/nama-fitur     # buat branch baru dari main
+3. ...edit kode, git add, git commit...
+4. git push origin fitur/nama-fitur   # push branch ke GitHub
+5. Buka Pull Request di GitHub (branch fitur → main)
+6. Tim mereview, memberi komentar, meminta perubahan jika perlu
+7. Setelah disetujui → merge Pull Request
+8. Hapus branch fitur (lokal & remote), lalu ulangi dari langkah 2</code></pre>
+    </div>
+
+    <div class="callout warning">
+      <span class="callout-icon">⚠️</span>
+      <div>
+        <span class="callout-title">Jangan commit langsung ke main</span>
+        <p>Di kerja tim, hindari commit langsung ke branch <code>main</code>. Selalu buat branch baru per fitur/perbaikan — ini memudahkan review dan mencegah kode yang belum teruji masuk ke branch utama.</p>
+      </div>
+    </div>
+
+    <h2 id="membuat-pr">Membuat Pull Request</h2>
+    <ol>
+      <li>Setelah <code>git push</code> branch baru, buka repo di GitHub — biasanya muncul banner kuning "Compare &amp; pull request". Klik itu, atau buka tab <strong>Pull requests</strong> → <strong>New pull request</strong>.</li>
+      <li>Pastikan <strong>base</strong> adalah branch tujuan (biasanya <code>main</code>) dan <strong>compare</strong> adalah branch fitur kalian.</li>
+      <li>Isi judul yang jelas dan deskripsi: apa yang diubah, kenapa, dan cara mengujinya.</li>
+      <li>Kalau relevan, tautkan ke issue terkait dengan menulis <code>Closes #12</code> di deskripsi.</li>
+      <li>Klik <strong>Create pull request</strong>.</li>
+    </ol>
+
+    <h2 id="review">Code Review</h2>
+    <p>Setelah PR dibuat, reviewer bisa:</p>
+    <ul>
+      <li><strong>Comment</strong> — memberi catatan pada baris kode tertentu tanpa memblokir merge.</li>
+      <li><strong>Approve</strong> — menyetujui perubahan, siap untuk di-merge.</li>
+      <li><strong>Request changes</strong> — meminta perbaikan sebelum PR bisa di-merge.</li>
+    </ul>
+    <p>Kalau ada revisi, cukup commit &amp; push lagi ke branch yang sama — PR akan otomatis ter-update.</p>
+
+    <p>Saat merge, GitHub menawarkan tiga opsi:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Opsi</th><th>Efek</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Create a merge commit</strong></td><td>Menyimpan seluruh riwayat commit dari branch fitur + membuat satu merge commit baru.</td></tr>
+          <tr><td><strong>Squash and merge</strong></td><td>Menggabungkan semua commit di branch fitur menjadi satu commit rapi di <code>main</code>. Populer untuk menjaga riwayat <code>main</code> tetap bersih.</td></tr>
+          <tr><td><strong>Rebase and merge</strong></td><td>Menambahkan commit dari branch fitur ke atas <code>main</code> satu per satu, tanpa merge commit.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="issues">GitHub Issues</h2>
+    <p>
+      Issues adalah tempat melaporkan bug, mengusulkan fitur, atau melacak pekerjaan — sebelum kode
+      ditulis. Buka tab <strong>Issues</strong> → <strong>New issue</strong>, beri judul jelas, deskripsi
+      langkah reproduksi (untuk bug), dan label yang sesuai (<code>bug</code>, <code>enhancement</code>, dll).
+    </p>
+    <p>
+      Hubungkan Issue dengan Pull Request dengan menulis kata kunci seperti <code>Closes #7</code>,
+      <code>Fixes #7</code>, atau <code>Resolves #7</code> di deskripsi PR — issue akan otomatis tertutup
+      begitu PR di-merge.
+    </p>
+
+    <div class="callout tip">
+      <span class="callout-icon">✅</span>
+      <div>
+        <span class="callout-title">Saatnya praktek</span>
+        <p>Coba <a href="latihan.html">Latihan 5</a>: buat Pull Request sungguhan (bisa ke repo materi ini sendiri, atau repo latihan bersama peserta lain).</p>
+      </div>
+    </div>
+
+    <nav class="page-nav" aria-label="Navigasi modul">
+      <a class="prev" href="modul-05-remote-github.html">
+        <div class="dir">← Sebelumnya</div>
+        <div class="title">Modul 5: Remote &amp; GitHub</div>
+      </a>
+      <a class="next" href="modul-07-best-practices.html">
+        <div class="dir">Selanjutnya →</div>
+        <div class="title">Modul 7: Best Practices</div>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<footer class="site-footer">
+  Dibuat untuk kebutuhan internal workshop Git &amp; GitHub · Materi statis (HTML/CSS/JS murni).
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

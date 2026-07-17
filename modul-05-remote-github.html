@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modul 5: Remote &amp; GitHub — Workshop Git &amp; GitHub</title>
+<meta name="description" content="Menghubungkan repo lokal ke GitHub: membuat repo, SSH key, clone, push, pull, dan GitHub Pages.">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Lewati ke konten utama</a>
+
+<header class="topbar">
+  <button class="icon-btn menu-toggle" data-menu-toggle aria-label="Buka menu" aria-expanded="false">☰</button>
+  <a class="brand" href="index.html">
+    <span class="logo-mark">git</span>
+    <span>Workshop Git &amp; GitHub</span>
+  </a>
+  <div class="topbar-spacer"></div>
+  <a class="gh-link" href="https://github.com/" target="_blank" rel="noopener">
+    <span>⭐</span><span>Lihat di GitHub</span>
+  </a>
+  <button class="icon-btn" data-theme-toggle aria-label="Ganti tema">🌙</button>
+</header>
+
+<div class="sidebar-backdrop" data-sidebar-backdrop></div>
+
+<div class="layout">
+  <nav class="sidebar" aria-label="Navigasi modul">
+    <div class="side-group">
+      <div class="side-group-title">Mulai</div>
+      <a class="side-link" href="index.html"><span class="num">•</span> Beranda</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Presentasi</div>
+      <a class="side-link" href="slide.html" target="_blank" rel="noopener"><span class="num">▶</span> Slide Workshop</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Modul</div>
+      <a class="side-link" href="modul-01-pengenalan.html"><span class="num">1</span> Pengenalan Git &amp; VCS</a>
+      <a class="side-link" href="modul-02-instalasi.html"><span class="num">2</span> Instalasi &amp; Konfigurasi</a>
+      <a class="side-link" href="modul-03-dasar-git.html"><span class="num">3</span> Perintah Dasar Git</a>
+      <a class="side-link" href="modul-04-branching.html"><span class="num">4</span> Branching &amp; Merging</a>
+      <a class="side-link" href="modul-05-remote-github.html"><span class="num">5</span> Remote &amp; GitHub</a>
+      <a class="side-link" href="modul-06-kolaborasi.html"><span class="num">6</span> Kolaborasi &amp; Pull Request</a>
+      <a class="side-link" href="modul-07-best-practices.html"><span class="num">7</span> Best Practices</a>
+    </div>
+    <div class="side-group">
+      <div class="side-group-title">Praktek</div>
+      <a class="side-link" href="latihan.html"><span class="num">✎</span> Latihan Praktek</a>
+      <a class="side-link" href="referensi.html"><span class="num">≡</span> Cheat Sheet</a>
+    </div>
+  </nav>
+
+  <main class="content" id="main">
+    <div class="page-header">
+      <div class="badge-row">
+        <span class="badge accent">Modul 5 / 7</span>
+        <span class="badge">± 30 menit</span>
+      </div>
+      <h1>Remote &amp; GitHub</h1>
+      <p class="lead">Di sinilah repo lokal kalian "naik ke cloud" — modul ini menghubungkan semua yang sudah dipelajari ke GitHub.</p>
+    </div>
+
+    <div class="toc">
+      <div class="toc-title">Di modul ini</div>
+      <ol>
+        <li><a href="#buat-repo">Membuat repository di GitHub</a></li>
+        <li><a href="#ssh">Setup SSH key</a></li>
+        <li><a href="#hubungkan">Menghubungkan repo lokal ke remote</a></li>
+        <li><a href="#clone">git clone</a></li>
+        <li><a href="#push-pull">git push, pull, fetch</a></li>
+        <li><a href="#pages">Bonus: GitHub Pages</a></li>
+      </ol>
+    </div>
+
+    <h2 id="buat-repo">1. Membuat Repository di GitHub</h2>
+    <ol>
+      <li>Login ke <a href="https://github.com" target="_blank" rel="noopener">github.com</a>, klik tombol <strong>New</strong> (atau ikon <code>+</code> di pojok kanan atas → <em>New repository</em>).</li>
+      <li>Isi <strong>Repository name</strong>, misalnya <code>materi-workshop</code>.</li>
+      <li>Pilih <strong>Public</strong> (agar bisa diakses lewat GitHub Pages nanti) atau <strong>Private</strong>.</li>
+      <li><strong>Jangan</strong> centang "Add a README file" kalau kalian sudah punya proyek lokal — biar tidak ada riwayat yang bentrok saat push pertama.</li>
+      <li>Klik <strong>Create repository</strong>. GitHub akan menampilkan halaman instruksi berisi URL repo kalian.</li>
+    </ol>
+
+    <h2 id="ssh">2. Setup SSH Key (Sekali Saja per Komputer)</h2>
+    <p>
+      SSH key memungkinkan komputer kalian terhubung ke GitHub tanpa memasukkan username/password setiap
+      kali push. Ini langkah sekali setup yang berlaku untuk semua repo di komputer tersebut.
+    </p>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-label">bash</span>
+        <button class="copy-btn">Salin</button>
+      </div>
+      <pre><code># 1. Buat key baru (ganti email dengan email GitHub kalian)
+ssh-keygen -t ed25519 -C "email@kamu.com"
+# tekan Enter untuk semua pertanyaan (pakai lokasi & pengaturan default)
+
+# 2. Jalankan ssh-agent lalu tambahkan key
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+
+# 3. Salin public key ke clipboard
+cat ~/.ssh/id_ed25519.pub
+# copy seluruh output yang muncul</code></pre>
+    </div>
+    <ol start="4">
+      <li>Buka GitHub → foto profil → <strong>Settings</strong> → <strong>SSH and GPG keys</strong> → <strong>New SSH key</strong>.</li>
+      <li>Tempel public key yang tadi disalin, beri judul (misalnya "Laptop Workshop"), lalu <strong>Add SSH key</strong>.</li>
+      <li>Tes koneksinya:</li>
+    </ol>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-label">bash</span>
+        <button class="copy-btn">Salin</button>
+      </div>
+      <pre><code>ssh -T git@github.com
+# kalau berhasil: "Hi username! You've successfully authenticated..."</code></pre>
+    </div>
+
+    <div class="callout info">
+      <span class="callout-icon">📌</span>
+      <div>
+        <span class="callout-title">Alternatif: HTTPS + Personal Access Token</span>
+        <p>Kalau setup SSH menyulitkan di jaringan workshop, kalian bisa memakai URL HTTPS dan login dengan <em>Personal Access Token</em> (dibuat lewat Settings → Developer settings → Personal access tokens) sebagai pengganti password.</p>
+      </div>
+    </div>
+
+    <h2 id="hubungkan">3. Menghubungkan Repo Lokal ke Remote</h2>
+    <p>Kalau kalian sudah punya proyek lokal (dari Modul 3), sambungkan ke repo GitHub yang baru dibuat:</p>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-label">bash</span>
+        <button class="copy-btn">Salin</button>
+      </div>
+      <pre><code>git remote add origin git@github.com:username/nama-repo.git
+git branch -M main
+git push -u origin main</code></pre>
+    </div>
+    <p><code>origin</code> adalah nama alias standar untuk remote utama. Flag <code>-u</code> menghubungkan branch lokal ke branch remote, jadi selanjutnya cukup <code>git push</code> tanpa argumen tambahan.</p>
+
+    <h2 id="clone">4. git clone — Mengunduh Repo yang Sudah Ada</h2>
+    <p>Kalau repo sudah ada di GitHub (punya orang lain, atau punya kalian dari komputer lain), gunakan <code>clone</code> untuk mengunduh seluruh proyek beserta riwayatnya:</p>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-label">bash</span>
+        <button class="copy-btn">Salin</button>
+      </div>
+      <pre><code>git clone git@github.com:username/nama-repo.git
+cd nama-repo</code></pre>
+    </div>
+
+    <h2 id="push-pull">5. push, pull, fetch</h2>
+    <div class="code-block">
+      <div class="code-block-head">
+        <span class="code-block-label">bash</span>
+        <button class="copy-btn">Salin</button>
+      </div>
+      <pre><code>git push                   # kirim commit lokal ke remote
+git push origin nama-branch  # push branch tertentu ke remote
+
+git fetch                  # unduh perubahan remote TANPA menggabungkan ke kerja lokal
+git pull                   # unduh + otomatis merge ke branch lokal (setara fetch + merge)</code></pre>
+    </div>
+    <div class="callout tip">
+      <span class="callout-icon">💡</span>
+      <div>
+        <span class="callout-title">Kapan pakai fetch vs pull?</span>
+        <p><code>fetch</code> aman dipakai kapan saja — hanya melihat apa yang berubah di remote tanpa menyentuh kerja kalian. <code>pull</code> langsung menggabungkan, jadi pastikan pekerjaan lokal sudah di-commit dulu supaya tidak bentrok.</p>
+      </div>
+    </div>
+
+    <h2 id="pages">Bonus: Hosting Materi Ini dengan GitHub Pages</h2>
+    <p>
+      Karena materi workshop ini murni HTML/CSS/JS statis, kalian bisa langsung meng-hostingnya gratis
+      lewat GitHub Pages — tanpa server, tanpa build step:
+    </p>
+    <ol>
+      <li>Push folder <code>materi-workshop</code> ini ke sebuah repo GitHub (lihat langkah 1–3 di atas).</li>
+      <li>Buka repo di GitHub → tab <strong>Settings</strong> → menu <strong>Pages</strong> di sidebar kiri.</li>
+      <li>Di bagian <strong>Build and deployment</strong>, pilih source <strong>Deploy from a branch</strong>.</li>
+      <li>Pilih branch <code>main</code> dan folder <code>/ (root)</code>, lalu klik <strong>Save</strong>.</li>
+      <li>Tunggu 1–2 menit, situs akan tersedia di <code>https://username.github.io/nama-repo/</code>.</li>
+    </ol>
+
+    <div class="callout tip">
+      <span class="callout-icon">✅</span>
+      <div>
+        <span class="callout-title">Saatnya praktek</span>
+        <p>Lanjutkan ke <a href="latihan.html">Latihan 4</a> untuk benar-benar menghubungkan proyek kalian ke GitHub dan melakukan push pertama.</p>
+      </div>
+    </div>
+
+    <nav class="page-nav" aria-label="Navigasi modul">
+      <a class="prev" href="modul-04-branching.html">
+        <div class="dir">← Sebelumnya</div>
+        <div class="title">Modul 4: Branching &amp; Merging</div>
+      </a>
+      <a class="next" href="modul-06-kolaborasi.html">
+        <div class="dir">Selanjutnya →</div>
+        <div class="title">Modul 6: Kolaborasi &amp; Pull Request</div>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<footer class="site-footer">
+  Dibuat untuk kebutuhan internal workshop Git &amp; GitHub · Materi statis (HTML/CSS/JS murni).
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
